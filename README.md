@@ -13,16 +13,16 @@
 
 ### 方法1：Git克隆（推荐）
 ```bash
-git clone https://github.com/您的用户名/public-components-skill.git
+git clone https://github.com/mahailiang999-creator/public-components-skill.git
 ```
 
 ### 方法2：GitHub CLI
 ```bash
-gh repo clone 您的用户名/public-components-skill
+gh repo clone mahailiang999-creator/public-components-skill
 ```
 
 ### 方法3：下载ZIP
-访问 [GitHub仓库页面](https://github.com/您的用户名/public-components-skill) 点击 "Code" → "Download ZIP"
+访问 [GitHub仓库页面](https://github.com/mahailiang999-creator/public-components-skill) 点击 "Code" → "Download ZIP"
 
 ### 方法4：通过npx skills add（推荐）
 ```bash
@@ -38,7 +38,7 @@ npx skills add public-components --skill https://github.com/您的用户名/publ
 ### 快速安装
 如果您已安装skills CLI，可以直接运行：
 ```bash
-npx skills add public-components --skill https://github.com/您的用户名/public-components-skill.git
+npx skills add public-components --skill https://github.com/mahailiang999-creator/public-components-skill.git
 ```
 
 ## 使用方法
