@@ -1,0 +1,35 @@
+{
+  "name": "public-components-skill",
+  "description": "专为前端开发设计的AI技能，专门用于理解和使用@arim-aisdc/public-components组件库",
+  "version": "1.0.0",
+  "type": "skill",
+  "author": "Your Name",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "typescript",
+    "ant-design",
+    "components",
+    "frontend",
+    "ai-skill",
+    "arim-aisdc"
+  ],
+  "capabilities": [
+    "组件使用指导",
+    "代码示例生成",
+    "最佳实践建议",
+    "TypeScript类型支持"
+  ],
+  "supportedFrameworks": [
+    "React",
+    "TypeScript",
+    "Ant Design"
+  ],
+  "entryPoint": "index.js",
+  "dependencies": {},
+  "files": [
+    "skill.json",
+    "README.md",
+    "package.json"
+  ]
+}

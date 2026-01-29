@@ -1,0 +1,23 @@
+{
+  "name": "public-components-skill",
+  "version": "1.0.0",
+  "description": "专为前端开发设计的AI技能，专门用于理解和使用@arim-aisdc/public-components组件库",
+  "main": "skill.json",
+  "keywords": [
+    "react",
+    "typescript",
+    "ant-design",
+    "components",
+    "frontend",
+    "ai-skill"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/public-components-skill.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
