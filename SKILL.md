@@ -11,25 +11,67 @@ description: 专为前端开发设计的AI技能，专门用于理解和使用@a
 
 **自动触发条件：** 当用户提到以下任何关键词时，AI 应自动加载此技能：
 
-- `@arim-aisdc/public-components`
-- `TableMax`
-- `ConfigProvider`
-- `PermissionProvider` 或 `Restricted`
-- `Filter` 组件（FilterSelect、FilterInputNumber、FilterSlider 等）
-- `ConditionExpression`
-- `ThemeProvider`
-- `public_zhCN`、`public_enUS`、`public_viVN`
-- `useTranslation`、`useEventBus`、`usePageCacheState`
-- `CustomForm`
-- `Empty` 组件
+### 核心组件关键词
+- `@arim-aisdc/public-components` - 组件库包名
+- `TableMax` - 高级表格组件
+- `ConfigProvider` - 全局配置提供者
+- `PermissionProvider`、`Restricted`、`PermissionContext` - 权限控制
+- `ThemeProvider` - 主题提供者
+- `CustomForm` - 自定义表单
+- `QueryFilter` - 查询筛选器
+- `SchemaForm` - Schema驱动表单
+- `BaseInfo` - 基础信息展示
+- `CenterModal` - 居中弹窗
+- `DrawerCom` - 抽屉组件
+- `SplitPane`、`SplitterPane` - 分割面板
+- `CacheTabs` - 缓存标签页
+- `DraggableBox` - 可拖拽盒子
+- `Empty` - 空状态组件
+- `Icon` - 图标组件
+- `ColorSelector` - 颜色选择器
+- `MessageTip`、`ModalTip` - 全局提示
+- `MicroComponent` - 微组件
+
+### Filter 组件系列
+- `FilterSelect` - 选择器筛选
+- `FilterInputNumber` - 数值筛选
+- `FilterSlider` - 滑块筛选
+- `FilterSwitch` - 开关筛选
+- `FilterColor` - 颜色筛选
+- `FilterRadio` - 单选筛选
+- `ConditionExpression` - 条件表达式
+
+### Hooks 关键词
+- `useTranslation` - 国际化翻译
+- `useEventBus` - 事件总线
+- `usePageCacheState` - 页面缓存状态
+- `useCenterModalState` - 弹窗状态管理
+- `useConfig` - 配置获取
+
+### 国际化关键词
+- `public_zhCN` - 中文语言包
+- `public_enUS` - 英文语言包
+- `public_viVN` - 越南文语言包
+
+### 类型和枚举关键词
+- `TableMaxProps`、`TableMaxColumnType` - 表格类型
+- `FilterType`、`InputType` - 筛选和输入类型
+- `CustomFormItemType` - 表单项类型
+- `ColumnVisibleConfigType`、`ColumnPinningConfigType` - 列配置类型
+- `ProFieldValueTypeEnum`、`DataSourceTypeEnum` - Schema表单类型
 
 **手动使用场景：** 当用户需要：
 
 - 使用 @arim-aisdc/public-components 组件库开发前端应用
-- 配置 TableMax 高级表格组件
+- 配置 TableMax 高级表格（分页、筛选、排序、编辑、导出等）
+- 构建复杂表单（CustomForm、QueryFilter、SchemaForm）
 - 设置主题、权限、国际化等全局配置
+- 实现拖拽、分割面板等交互功能
+- 处理权限控制和条件渲染
 - 解决组件库使用中的常见问题
-- 实现表格 CRUD 操作、筛选、排序、分页等功能
+- 实现表格 CRUD 操作、虚拟滚动、行拖拽等高级功能
+- 自定义主题变量和样式
+- 实现多语言国际化
 
 ## Instructions
 
@@ -645,10 +687,67 @@ type ThemeProviderPropsType = {
 <Empty />
 ```
 
-### 8. 其他核心组件
+### 8. SchemaForm Schema驱动表单
+
+基于 ProComponents 的 Schema 驱动表单，支持动态表单配置和多种数据源。
 
 ```typescript
-// CenterModal 居中弹窗
+import { SchemaForm, ProFieldValueTypeEnum, DataSourceTypeEnum } from '@arim-aisdc/public-components';
+
+<SchemaForm
+  layoutType="ModalForm"                        // 布局类型：'ModalForm' | 'DrawerForm' | 'Form'
+  title="创建用户"                              // 表单标题
+  open={visible}                                // 是否显示
+  onOpenChange={setVisible}                     // 显示状态变化回调
+  columns={[                                    // 表单列配置
+    {
+      title: '用户名',
+      dataIndex: 'username',
+      valueType: ProFieldValueTypeEnum.Text,    // 字段类型
+      formItemProps: {
+        rules: [{ required: true, message: '请输入用户名' }],
+      },
+    },
+    {
+      title: '角色',
+      dataIndex: 'role',
+      valueType: ProFieldValueTypeEnum.Select,
+      dataSourceType: DataSourceTypeEnum.Remote, // 数据源类型
+      request: async () => {                     // 远程数据请求
+        const roles = await fetchRoles();
+        return roles.map(r => ({ label: r.name, value: r.id }));
+      },
+    },
+  ]}
+  onFinish={async (values) => {                 // 提交回调
+    await createUser(values);
+    return true;
+  }}
+/>
+```
+
+**ProFieldValueTypeEnum 字段类型：**
+- Text - 文本输入
+- Select - 下拉选择
+- Radio - 单选
+- Checkbox - 复选
+- DatePicker - 日期选择
+- DateTimePicker - 日期时间选择
+- DateRangePicker - 日期范围
+- TextArea - 文本域
+- Digit - 数字输入
+- Money - 金额输入
+- Password - 密码输入
+- Switch - 开关
+
+**DataSourceTypeEnum 数据源类型：**
+- Static - 静态数据
+- Remote - 远程数据
+
+### 9. 其他核心组件
+
+```typescript
+// CenterModal 居中弹窗（支持拖拽和调整大小）
 <CenterModal
   visible={visible}                             // 是否显示
   title="标题"                                 // 弹窗标题
@@ -659,6 +758,8 @@ type ThemeProviderPropsType = {
   width={520}                                 // 弹窗宽度
   maskClosable={false}                         // 点击遮罩是否关闭
   destroyOnClose={true}                        // 关闭时销毁
+  draggable={true}                             // 是否可拖拽
+  resizable={true}                             // 是否可调整大小
 />
 
 // Drawer 抽屉组件
@@ -744,30 +845,206 @@ type ThemeProviderPropsType = {
 
 ## Hooks 能力
 
-#### useTranslation 国际化
+### 1. useTranslation 国际化翻译
+
+强大的国际化翻译 Hook，支持嵌套键查找、占位符替换和数组翻译辅助函数。
 
 ```typescript
-const [t] = useTranslation();
+import { useTranslation } from '@arim-aisdc/public-components';
+
+const [t, localeCode] = useTranslation();
+
+// 基础翻译
 const title = t('global.title'); // 获取翻译文本
+
+// 嵌套键翻译
+const message = t('user.profile.name'); // 支持点号分隔的嵌套键
+
+// 占位符替换
+const greeting = t('global.welcome', 'John', '2024'); // "欢迎 {0} 在 {1} 年加入"
+
+// 获取当前语言代码
+console.log(localeCode); // 'zh-CN' | 'en-US' | 'vi-VN'
 ```
 
-#### useEventBus 事件总线
+**数组翻译辅助函数：**
 
 ```typescript
-// 发送事件
-events.emit('data-changed', { id: 1, name: 'test' });
+// tA - 通用数组翻译（自定义字段）
+const translatedData = t.tA(data, {
+  fieldKey: 'type', // 指定哪个字段作为翻译键
+  labelKey: 'typeName', // 指定哪个字段保存翻译后的值
+  groupPrefix: 'status', // 可选的分组前缀
+});
 
-// 监听事件
+// tT - 翻译 TableMax 列配置
+const columns = t.tT([
+  { id: 'name', accessorKey: 'name' },
+  { id: 'age', accessorKey: 'age' },
+]);
+// 自动将 header 设置为 t(`apiField.${accessorKey}`)
+
+// tQ - 翻译 QueryFilter 配置
+const filterFields = t.tQ([
+  { field: 'name', formType: 'text' },
+  { field: 'status', formType: 'select' },
+]);
+// 自动设置 label 和 inputTips
+
+// tF - 翻译 CustomForm 配置
+const formFields = t.tF([
+  { field: 'name', formType: CustomFormItemType.Text },
+  { field: 'email', formType: CustomFormItemType.Text },
+]);
+
+// tB - 翻译 BaseInfo 配置
+const infoFields = t.tB([
+  { field: 'name', value: 'John' },
+  { field: 'age', value: 25 },
+]);
+// 自动将 text 设置为 t(`apiField.${field}`)
+```
+
+**自定义语言包：**
+
+```typescript
+const customLocales = {
+  'zh-CN': {
+    myApp: {
+      title: '我的应用',
+      welcome: '欢迎使用',
+    },
+  },
+  'en-US': {
+    myApp: {
+      title: 'My App',
+      welcome: 'Welcome',
+    },
+  },
+};
+
+const [t] = useTranslation(customLocales);
+const title = t('myApp.title'); // 自动合并自定义语言包
+```
+
+### 2. useEventBus 事件总线
+
+全局事件总线 Hook，用于跨组件通信。
+
+```typescript
+import { useEventBus, events } from '@arim-aisdc/public-components';
+
+// 发送事件（任何地方）
+events.emit('data-changed', { id: 1, name: 'test' });
+events.emit('user-login', { userId: '123', username: 'john' });
+
+// 监听事件（在组件中）
 useEventBus('data-changed', data => {
   console.log('数据变化:', data);
+  // 自动在组件卸载时清理监听器
 });
+
+// 一次性监听
+events.once('init-complete', () => {
+  console.log('初始化完成');
+});
+
+// 手动移除监听器
+const handler = data => console.log(data);
+events.on('my-event', handler);
+events.off('my-event', handler);
+
+// 调用所有监听器并返回结果数组
+const results = events.invoke('calculate', 10, 20);
 ```
 
-#### usePageCacheState 页面缓存状态
+### 3. usePageCacheState 页面缓存状态
+
+自动缓存页面状态到 localStorage/sessionStorage，刷新页面后自动恢复。
 
 ```typescript
-const [state, setState] = usePageCacheState('page-key', initialState);
-// 自动缓存页面状态，刷新页面后恢复
+import { usePageCacheState } from '@arim-aisdc/public-components';
+
+// 基础用法
+const [state, setState] = usePageCacheState('page-key', { count: 0 });
+
+// 更新状态（自动缓存）
+setState({ count: 1 });
+
+// 支持嵌套字段更新
+const [formData, setFormData] = usePageCacheState('form-data', {
+  user: { name: '', age: 0 },
+  settings: { theme: 'light' },
+});
+
+setFormData({ user: { name: 'John' } }); // 深度合并
+
+// 初始化状态（重置为初始值）
+const [state, setState, initState] = usePageCacheState('key', initialValue);
+initState();
+
+// 清除缓存
+const [state, setState, initState, clearState] = usePageCacheState('key', initialValue);
+clearState();
+```
+
+**缓存特性：**
+- 自动缓存到 localStorage
+- 缓存有效期：1小时
+- 支持深度合并嵌套对象
+- 组件卸载时保留缓存
+- 刷新页面自动恢复状态
+
+### 4. useCenterModalState 弹窗状态管理
+
+简化 CenterModal 状态管理的 Hook。
+
+```typescript
+import { useCenterModalState, CenterModal } from '@arim-aisdc/public-components';
+
+const [modalProps, setModalProps, closeModal] = useCenterModalState();
+
+// 打开弹窗
+const openModal = () => {
+  setModalProps({
+    visible: true,
+    title: '编辑用户',
+    width: 600,
+    // 其他 CenterModal 属性
+  });
+};
+
+// 关闭弹窗
+const handleOk = () => {
+  // 处理确认逻辑
+  closeModal();
+};
+
+// 渲染弹窗
+<CenterModal
+  {...modalProps}
+  onOk={handleOk}
+  onCancel={closeModal}
+>
+  弹窗内容
+</CenterModal>
+```
+
+### 5. useConfig 配置获取
+
+获取 ConfigProvider 提供的全局配置。
+
+```typescript
+import { useConfig } from '@arim-aisdc/public-components';
+
+const config = useConfig();
+
+// 访问配置
+const theme = config.theme; // 'light' | 'dark'
+const locale = config.locale; // 语言包对象
+const userId = config.userId; // 用户ID
+const dateFormat = config.dateFormat; // 日期格式
+const tableMaxConfig = config.tableMax; // TableMax 全局配置
 ```
 
 ### 核心使用模式
@@ -1061,6 +1338,33 @@ const userPermissions = await fetchUserPermissions();
 - **构建工具**: Father (打包) + Dumi (文档)
 - **样式**: Less + CSS 变量
 
+### 工具函数
+
+组件库提供了一些实用的工具函数：
+
+```typescript
+import { getTextWidth, to, judgeHasPermission } from '@arim-aisdc/public-components';
+
+// 1. getTextWidth - 计算文本宽度
+const width = getTextWidth('Hello World', 14); // 返回像素宽度
+// 用途：动态计算列宽、文本截断判断
+
+// 2. to - Promise 错误处理（Go 风格）
+const [error, data] = await to(fetchUserData());
+if (error) {
+  console.error('请求失败:', error);
+  return;
+}
+console.log('数据:', data);
+
+// 3. judgeHasPermission - 权限数组比较
+const hasPermission = judgeHasPermission(
+  ['user:read', 'user:write'], // 需要的权限
+  ['user:read', 'user:write', 'admin'] // 用户拥有的权限
+);
+// 返回 true（用户拥有所有需要的权限）
+```
+
 ## 重要提醒
 
 **AI 助手使用指南：**
@@ -1070,18 +1374,62 @@ const userPermissions = await fetchUserPermissions();
 3. **缓存唯一性** - 确保总是提醒用户为 TableMax 提供唯一的 tableId
 4. **全局配置** - 确保总是检查 ConfigProvider 的正确配置
 5. **性能建议** - 根据使用场景主动提供性能优化建议
+6. **类型安全** - 使用正确的类型定义（TableMaxProps、TableMaxColumnType、CustomFormItemType 等）
+7. **国际化支持** - 优先使用 useTranslation 的辅助函数（tT、tQ、tF、tB）进行配置翻译
+8. **错误处理** - 推荐使用 to() 工具函数进行 Promise 错误处理
 
 **开发者使用提醒：**
 
-1. 总是为 TableMax 组件提供唯一的 tableId
-2. 正确配置 ConfigProvider 以启用全局功能
-3. 根据数据量大小选择合适的性能优化策略
-4. 遵循组件库的最佳实践和 API 设计模式
+1. **TableMax 必须配置**：
+   - 总是为 TableMax 组件提供唯一的 tableId
+   - 根据数据量选择是否开启虚拟滚动（enableVirtualList）
+   - 后端分页时设置 manualSorting 和 manualFiltering 为 true
+
+2. **全局配置最佳实践**：
+   - 在应用根组件配置 ConfigProvider
+   - 设置 userId 以实现用户级缓存隔离
+   - 配置 tableKeyPrefixCls 避免缓存冲突
+   - 使用 ThemeProvider 实现主题切换
+
+3. **性能优化策略**：
+   - 使用 useMemo 缓存列配置
+   - 使用 useCallback 缓存事件处理函数
+   - 大数据量（>1000行）开启虚拟列表
+   - 合理设置 cacheMaxAge 控制缓存时间
+
+4. **权限控制集成**：
+   - 使用 PermissionProvider 包裹应用根组件
+   - 使用 Restricted 组件进行条件渲染
+   - 使用 judgeHasPermission 工具函数进行权限判断
+
+5. **国际化配置**：
+   - 在 ConfigProvider 中配置 locale
+   - 使用 useTranslation 的辅助函数简化配置翻译
+   - 支持自定义语言包扩展
+
+**常见问题快速解决：**
+
+1. **表格缓存问题**：清除 localStorage 中的表格缓存或升级 version
+2. **主题不生效**：检查 ConfigProvider 的 autoSetCssVars 是否为 true
+3. **权限不生效**：确保 PermissionProvider 包裹了需要权限控制的组件
+4. **国际化不生效**：检查 ConfigProvider 的 locale 配置是否正确
+5. **虚拟滚动问题**：确保设置了正确的 rowHeight
 
 **技能版本信息：**
 
 - 组件库版本：@arim-aisdc/public-components v2.3.77
-- 技能创建时间：2026-01-28
+- 技能创建时间：2026-01-29
 - 技能维护：此技能应随组件库版本更新而更新
+- 最后更新：2026-01-29
+
+**组件库核心依赖：**
+
+- React: >=17.0.1
+- Ant Design: ^5.27.3
+- @tanstack/react-table: ^8.9.1（TableMax 核心）
+- @tanstack/react-virtual: ^3.13.12（虚拟滚动）
+- dayjs: ^1.11.11（日期处理）
+- react-dnd: ^16.0.1（拖拽功能）
+- xlsx: ^0.18.5（Excel 导出）
 
 这个技能将帮助 AI 模型更好地理解和使用这个组件库，提供准确、高效的前端开发解决方案。
