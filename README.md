@@ -11,20 +11,7 @@
 
 ## 安装方法
 
-### 方法1：Git克隆（推荐）
-```bash
-git clone https://github.com/mahailiang999-creator/public-components-skill.git
-```
-
-### 方法2：GitHub CLI
-```bash
-gh repo clone mahailiang999-creator/public-components-skill
-```
-
-### 方法3：下载ZIP
-访问 [GitHub仓库页面](https://github.com/mahailiang999-creator/public-components-skill) 点击 "Code" → "Download ZIP"
-
-### 方法4：通过npx skills add（推荐）
+### 通过npx skills add安装（推荐）
 
 **项目级别安装（当前项目）：**
 ```bash
@@ -63,10 +50,27 @@ npx skills add mahailiang999-creator/public-components-skill --agent claude-code
 npx skills add mahailiang999-creator/public-components-skill -g --agent claude-code
 ```
 
+<!-- 
+其他安装方法（暂时注释）
+
+### 方法1：Git克隆
+```bash
+git clone https://github.com/mahailiang999-creator/public-components-skill.git
+```
+
+### 方法2：GitHub CLI
+```bash
+gh repo clone mahailiang999-creator/public-components-skill
+```
+
+### 方法3：下载ZIP
+访问 [GitHub仓库页面](https://github.com/mahailiang999-creator/public-components-skill) 点击 "Code" → "Download ZIP"
+
 ### 备用安装方式（如果上面命令失败）
 ```bash
 npx skills add https://github.com/mahailiang999-creator/public-components-skill.git
 ```
+-->
 
 ### 安装步骤
 1. 使用上述任一方法下载skill文件
