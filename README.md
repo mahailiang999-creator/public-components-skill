@@ -26,7 +26,24 @@ gh repo clone mahailiang999-creator/public-components-skill
 
 ### 方法4：通过npx skills add（推荐）
 ```bash
-npx skills add public-components --skill https://github.com/您的用户名/public-components-skill.git
+npx skills add mahailiang999-creator/public-components-skill
+```
+
+### 安装步骤
+1. 使用上述任一方法下载skill文件
+2. 确保您使用的是支持技能扩展的AI助手
+3. 按照您的AI助手的文档安装skill
+4. 重启AI助手以加载新skill
+
+### 快速安装
+如果您已安装skills CLI，可以直接运行：
+```bash
+npx skills add mahailiang999-creator/public-components-skill
+```
+
+### 备用安装方式（如果上面命令失败）
+```bash
+npx skills add https://github.com/mahailiang999-creator/public-components-skill.git
 ```
 
 ### 安装步骤
