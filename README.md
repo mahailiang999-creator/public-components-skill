@@ -11,9 +11,35 @@
 
 ## 安装方法
 
-1. 确保您使用的是支持技能扩展的AI助手
-2. 下载此skill文件
+### 方法1：Git克隆（推荐）
+```bash
+git clone https://github.com/您的用户名/public-components-skill.git
+```
+
+### 方法2：GitHub CLI
+```bash
+gh repo clone 您的用户名/public-components-skill
+```
+
+### 方法3：下载ZIP
+访问 [GitHub仓库页面](https://github.com/您的用户名/public-components-skill) 点击 "Code" → "Download ZIP"
+
+### 方法4：通过npx skills add（推荐）
+```bash
+npx skills add public-components --skill https://github.com/您的用户名/public-components-skill.git
+```
+
+### 安装步骤
+1. 使用上述任一方法下载skill文件
+2. 确保您使用的是支持技能扩展的AI助手
 3. 按照您的AI助手的文档安装skill
+4. 重启AI助手以加载新skill
+
+### 快速安装
+如果您已安装skills CLI，可以直接运行：
+```bash
+npx skills add public-components --skill https://github.com/您的用户名/public-components-skill.git
+```
 
 ## 使用方法
 
