@@ -25,20 +25,42 @@ gh repo clone mahailiang999-creator/public-components-skill
 访问 [GitHub仓库页面](https://github.com/mahailiang999-creator/public-components-skill) 点击 "Code" → "Download ZIP"
 
 ### 方法4：通过npx skills add（推荐）
+
+**项目级别安装（当前项目）：**
 ```bash
 npx skills add mahailiang999-creator/public-components-skill
 ```
 
+**全局安装（所有项目）：**
+```bash
+npx skills add mahailiang999-creator/public-components-skill -g
+```
+
+**仅安装到Claude Code（项目级别）：**
+```bash
+npx skills add mahailiang999-creator/public-components-skill --agent claude-code
+```
+
+**仅安装到Claude Code（全局）：**
+```bash
+npx skills add mahailiang999-creator/public-components-skill -g --agent claude-code
+```
+
+**指定多个agents：**
+```bash
+npx skills add mahailiang999-creator/public-components-skill --agent claude-code,cursor
+```
+
 ### 安装步骤
-1. 使用上述任一方法下载skill文件
+1. 选择合适的安装方式（推荐全局安装到Claude Code）
 2. 确保您使用的是支持技能扩展的AI助手
 3. 按照您的AI助手的文档安装skill
 4. 重启AI助手以加载新skill
 
-### 快速安装
-如果您已安装skills CLI，可以直接运行：
+### 快速安装（推荐Claude Code用户）
+如果您主要使用Claude Code，建议全局安装：
 ```bash
-npx skills add mahailiang999-creator/public-components-skill
+npx skills add mahailiang999-creator/public-components-skill -g --agent claude-code
 ```
 
 ### 备用安装方式（如果上面命令失败）
