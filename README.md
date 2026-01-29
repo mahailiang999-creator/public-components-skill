@@ -14,31 +14,36 @@
 ### 通过npx skills add安装（推荐）
 
 **项目级别安装（当前项目）：**
+
 ```bash
 npx skills add mahailiang999-creator/public-components-skill
 ```
 
 **全局安装（所有项目）：**
+
 ```bash
 npx skills add mahailiang999-creator/public-components-skill -g
 ```
 
 **仅安装到Claude Code（项目级别）：**
+
 ```bash
 npx skills add mahailiang999-creator/public-components-skill --agent claude-code
 ```
 
 **仅安装到Claude Code（全局）：**
+
 ```bash
 npx skills add mahailiang999-creator/public-components-skill -g --agent claude-code
 ```
 
 **指定多个agents：**
+
 ```bash
 npx skills add mahailiang999-creator/public-components-skill --agent claude-code,cursor
 ```
 
-### 安装步骤
+<!-- ### 安装步骤
 1. 选择合适的安装方式（推荐全局安装到Claude Code）
 2. 确保您使用的是支持技能扩展的AI助手
 3. 按照您的AI助手的文档安装skill
@@ -48,9 +53,9 @@ npx skills add mahailiang999-creator/public-components-skill --agent claude-code
 如果您主要使用Claude Code，建议全局安装：
 ```bash
 npx skills add mahailiang999-creator/public-components-skill -g --agent claude-code
-```
+``` -->
 
-<!-- 
+<!--
 其他安装方法（暂时注释）
 
 ### 方法1：Git克隆
@@ -73,16 +78,19 @@ npx skills add https://github.com/mahailiang999-creator/public-components-skill.
 -->
 
 ### 安装步骤
+
 1. 使用上述任一方法下载skill文件
 2. 确保您使用的是支持技能扩展的AI助手
 3. 按照您的AI助手的文档安装skill
 4. 重启AI助手以加载新skill
 
-### 快速安装
+<!-- ### 快速安装
+
 如果您已安装skills CLI，可以直接运行：
+
 ```bash
 npx skills add public-components --skill https://github.com/mahailiang999-creator/public-components-skill.git
-```
+``` -->
 
 ## 使用方法
 
@@ -94,12 +102,25 @@ npx skills add public-components --skill https://github.com/mahailiang999-creato
 
 ## 包含的组件
 
-- Button（按钮）
-- Input（输入框）
-- Modal（模态框）
-- Table（表格）
-- Form（表单）
-- 以及更多...
+- `@arim-aisdc/public-components` - 组件库包名
+- `TableMax` - 高级表格组件
+- `ConfigProvider` - 全局配置提供者
+- `PermissionProvider`、`Restricted`、`PermissionContext` - 权限控制
+- `ThemeProvider` - 主题提供者
+- `CustomForm` - 自定义表单
+- `QueryFilter` - 查询筛选器
+- `SchemaForm` - Schema驱动表单
+- `BaseInfo` - 基础信息展示
+- `CenterModal` - 居中弹窗
+- `DrawerCom` - 抽屉组件
+- `SplitPane`、`SplitterPane` - 分割面板
+- `CacheTabs` - 缓存标签页
+- `DraggableBox` - 可拖拽盒子
+- `Empty` - 空状态组件
+- `Icon` - 图标组件
+- `ColorSelector` - 颜色选择器
+- `MessageTip`、`ModalTip` - 全局提示
+- `MicroComponent` - 微组件
 
 ## 技术栈
 
