@@ -1,6 +1,6 @@
 # References 与源码实现差异清单
 
-本文档用于记录当前 `references/` 文档与 `C:\Work_Files\public-components` 源码之间的一致性状态。
+本文档用于记录当前 `references/` 文档与 `\public-components` 源码之间的一致性状态。
 
 原则：
 

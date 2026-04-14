@@ -2,8 +2,6 @@
 
 这个 Skill 专门用于帮助 AI 正确使用 `@arim-aisdc/public-components`。
 
-本仓库当前版本已经根据真实源码目录 `C:\Work_Files\public-components` 做过校准，重点解决两个问题：
-
 1. 让 AI 在用户代码出现 `import { ... } from '@arim-aisdc/public-components';` 时自动进入本 Skill 语境。
 2. 避免 AI 继续生成当前版本里并未公开导出的 API。
 
@@ -12,7 +10,6 @@
 - Skill 版本：`1.1.0`
 - 包名：`@arim-aisdc/public-components`
 - 版本：`2.3.91`
-- 源码入口：`C:\Work_Files\public-components\src\index.ts`
 
 ## 核心能力
 
