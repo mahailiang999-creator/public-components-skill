@@ -1,574 +1,125 @@
-# 故障排查
+# Troubleshooting
 
-## 表格缓存问题
+本文档只保留当前源码下仍然成立的排查路径。
 
-### 问题：表格设置没有保存
+## 1. TableMax 报 `tableId is required`
 
-**解决方案：**
+原因：
 
-1. 检查 tableId 是否唯一
-```typescript
-// 正确
-<TableMax tableId="user-table" />
+- 没有传 `tableId`
 
-// 错误 - 多个表格使用相同 ID
-<TableMax tableId="table" />
-<TableMax tableId="table" />
+修复：
+
+```tsx
+<TableMax tableId="unique-table-id" />
 ```
 
-2. 检查 userId 是否设置
-```typescript
-<ConfigProvider config={{ userId: getCurrentUserId() }}>
-  <App />
-</ConfigProvider>
+## 2. 表格缓存串了
+
+优先检查：
+
+1. `tableId` 是否唯一
+2. `ConfigProvider` 是否设置了 `userId`
+3. 是否需要调整 `tableKeyPrefixCls`
+4. 是否需要升级 `version`
+
+## 3. 后端排序或筛选没生效
+
+优先检查：
+
+- `manualSorting` / `manualFiltering` 是否开启
+- 是否监听了 `onSortingChange` / `onFilteringChange`
+- 后端接口是否按组件返回参数格式消费
+
+推荐日志：
+
+```ts
+onSortingChange={(sortValueArr, sortValueStr) => console.log(sortValueStr)}
+onFilteringChange={({ formatFiltersV2 }) => console.log(formatFiltersV2)}
 ```
 
-3. 清除特定表格缓存
-```typescript
-localStorage.removeItem('TableMax-/path-user-table-user123');
-```
+## 4. 虚拟滚动看起来没效果
 
-4. 升级缓存版本
-```typescript
-<TableMax version="1.0.1" />
-```
+优先检查：
 
-### 问题：虚拟滚动不生效
+- 是否开启 `enableVirtualList`
+- 是否提供合理的 `rowHeight`
+- 外层容器是否有稳定高度
+- 数据量是否足够大
 
-**解决方案：**
+## 5. 权限控制不生效
 
-1. 确保设置正确的 rowHeight
-```typescript
-<TableMax
-  enableVirtualList={true}
-  rowHeight={42}
-/>
-```
+优先检查：
 
-2. 检查容器高度
-```typescript
-<div style={{ height: 500 }}>
-  <TableMax autoHeight={false} />
-</div>
-```
+1. 是否包裹了 `PermissionProvider`
+2. `Restricted` 用的是不是 `requiredPermissions`
+3. 权限字符串是否和后端返回一致
 
-### 问题：分页不更新
+调试写法：
 
-**解决方案：**
-
-1. 检查 changePagination 是否正确实现
-```typescript
-const handlePagination = useCallback(({ skipCount, pageSize }) => {
-  fetchData({ skipCount, pageSize });
-}, [fetchData]);
-
-<TableMax changePagination={handlePagination} />
-```
-
-2. 检查 totalCount 是否正确
-```typescript
-<TableMax totalCount={total} />
-```
-
-## 主题问题
-
-### 问题：主题不生效
-
-**解决方案：**
-
-1. 检查 autoSetCssVars 是否为 true
-```typescript
-<ConfigProvider
-  config={{
-    autoSetCssVars: true,
-  }}
->
-  <App />
-</ConfigProvider>
-```
-
-2. 检查 root 配置是否正确
-```typescript
-<ConfigProvider
-  config={{
-    root: '#root',
-  }}
->
-  <App />
-</ConfigProvider>
-```
-
-3. 检查 ThemeProvider 是否包裹
-```typescript
-<ThemeProvider theme="dark">
-  <App />
-</ThemeProvider>
-```
-
-### 问题：CSS 变量覆盖不生效
-
-**解决方案：**
-
-1. 确保在 :root 中定义
-```css
-:root {
-  --global-primary-color: #custom-color;
-}
-```
-
-2. 检查变量名是否正确
-```typescript
-<ConfigProvider
-  config={{
-    variablesJson: {
-      '--global-primary-color': '#1890ff',
-    },
-  }}
-/>
-```
-
-## 权限问题
-
-### 问题：权限不生效
-
-**解决方案：**
-
-1. 确保 PermissionProvider 包裹了组件
-```typescript
-<PermissionProvider permissions={userPermissions}>
-  <App />
-</PermissionProvider>
-```
-
-2. 检查权限字符串是否正确
-```typescript
-<Restricted requiredPermissions={['user:write']}>
-  <Button>编辑</Button>
-</Restricted>
-```
-
-3. 使用 isAllowedTo 调试
-```typescript
+```tsx
 const { isAllowedTo } = useContext(PermissionContext);
-
-const hasPermission = isAllowedTo(['user:write']);
-console.log('Has permission:', hasPermission);
+console.log(isAllowedTo(['user:write']));
 ```
 
-## 国际化问题
+## 6. 多语言配置不生效
 
-### 问题：翻译不生效
+优先检查：
 
-**解决方案：**
+- 是否在 `ConfigProvider` 中设置了 `locale`
+- 是否错误地把 `useTranslation` 当成根包公开 hook 使用
 
-1. 检查 locale 配置
-```typescript
+推荐写法：
+
+```tsx
 <ConfigProvider config={{ locale: public_zhCN }}>
   <App />
 </ConfigProvider>
 ```
 
-2. 检查语言包键是否正确
-```typescript
-const [t] = useTranslation();
+## 7. CenterModal 状态不对
 
-const title = t('global.title'); // 确保键存在
+优先检查：
+
+- 是否使用 `open` 字段
+- 是否通过 `useCenterModalState` 返回的 `closeModal` 关闭
+
+不要继续写旧的 `visible` 示例。
+
+## 8. 工具函数导入报错
+
+如果是 `to` / `judgeHasPermission` / `getTextWidth`，正确路径是：
+
+```ts
+import { to, judgeHasPermission, getTextWidth } from '@arim-aisdc/public-components/utils';
 ```
 
-3. 使用辅助函数调试
-```typescript
-const columns = t.tT([
-  { id: 'name', accessorKey: 'name' },
-]);
+不是根包导出。
 
-// 检查翻译后的 header
-console.log(columns[0].header);
-```
+## 9. 看到旧文档里的 ThemeProvider
 
-### 问题：翻译键警告
+当前应先判断目标是否只是做主题配置。
 
-**解决方案：**
+如果只是业务接入，优先改成：
 
-useTranslation 会自动警告缺失的翻译键，确保在语言包中添加对应的翻译：
-
-```typescript
-const locale = {
-  global: {
-    title: '标题',
-    placeholder: {
-      input: '请输入',
-      select: '请选择',
-      startTime: '开始时间',
-      endTime: '结束时间',
+```tsx
+<ConfigProvider
+  config={{
+    theme: 'dark',
+    variablesJson: {
+      '--global-primary-color': '#1677ff',
     },
-  },
-  apiField: {
-    name: '姓名',
-    age: '年龄',
-  },
-};
-```
-
-## 表单问题
-
-### 问题：表单提交不生效
-
-**解决方案：**
-
-1. 检查 handleSubmit 是否正确
-```typescript
-const handleSubmit = async ({ data }) => {
-  const [error] = await to(submitForm(data));
-  if (error) {
-    message.error('提交失败');
-    return false;
-  }
-  message.success('提交成功');
-  return true;
-};
-
-<CustomForm handleSubmit={handleSubmit} />
-```
-
-2. 检查字段配置
-```typescript
-const formFields = [
-  {
-    field: 'name',  // 确保 field 正确
-    label: '姓名',
-    formType: CustomFormItemType.Text,
-  },
-];
-```
-
-3. 检查 QueryFilter submit 回调参数
-```typescript
-const handleSubmit = ({ data }, item, type) => {
-  console.log('表单数据:', data);
-  console.log('当前字段:', item);
-  console.log('输入类型:', type); // 'min' | 'max' | 'string'
-};
-```
-
-### 问题：动态选项不更新
-
-**解决方案：**
-
-1. 使用 getEditOptionsFn
-```typescript
-const columns = [
-  {
-    id: 'status',
-    getEditOptionsFn: async (inputValue) => {
-      const options = await fetchOptions(inputValue);
-      return options;
-    },
-  },
-];
-```
-
-2. 使用 getOptionsFn (QueryFilter/RemoteSelect)
-```typescript
-const filterFields = [
-  {
-    field: 'status',
-    formType: FormItemType.RemoteSelect,
-    getOptionsFn: async (keyword) => {
-      return fetchOptions(keyword);
-    },
-  },
-];
-```
-
-## 拖拽问题
-
-### 问题：行拖拽不生效
-
-**解决方案：**
-
-1. 检查是否启用了拖拽
-```typescript
-<TableMax canRowDrag={true} />
-```
-
-2. 检查行是否有唯一 ID
-```typescript
-<TableMax rowKey="id" />
-```
-
-3. 检查 dragBeforeEnd
-```typescript
-const dragBeforeEnd = (toDatas, fromDatas) => {
-  console.log('拖拽验证:', toDatas, fromDatas);
-  return true; // 返回 false 会阻止拖拽
-};
-```
-
-4. 检查 disableDragRowIds
-```typescript
-<TableMax
-  canRowDrag={true}
-  disableDragRowIds={[1, 2]}
-/>
-```
-
-### 问题：SplitPane 拖拽不生效
-
-**解决方案：**
-
-1. 检查 allowResize
-```typescript
-<SplitPane
-  allowResize={true}
-  pane1Dom={<LeftPanel />}
-  pane2Dom={<RightPanel />}
-/>
-```
-
-2. 检查缓存数据
-```typescript
-import { setSplitSizeData, getSplitSizeData } from './util';
-
-// 查看缓存
-const cachedSize = getSplitSizeData(pageName, moduleName, userId, prefix);
-
-// 清除缓存
-localStorage.removeItem(`${prefix}_${pageName}_${moduleName}_${userId}_splitSize`);
-```
-
-## 筛选排序问题
-
-### 问题：后端筛选不生效
-
-**解决方案：**
-
-1. 确保 manualFiltering 为 true
-```typescript
-<TableMax
-  manualFiltering={true}
-  onFilteringChange={handleFilter}
-/>
-```
-
-2. 检查筛选格式
-```typescript
-const handleFilter = useCallback(({ formatFiltersV2 }) => {
-  console.log('筛选条件:', formatFiltersV2);
-  fetchData({ filters: formatFiltersV2 });
-}, [fetchData]);
-```
-
-3. 检查筛选操作符
-```typescript
-// formatFiltersV2 格式
-{
-  columnId: {
-    operator: 'Eq',  // FilterOperator
-    value: 'value',
-  },
-}
-```
-
-### 问题：后端排序不生效
-
-**解决方案：**
-
-1. 确保 manualSorting 为 true
-```typescript
-<TableMax
-  manualSorting={true}
-  onSortingChange={handleSort}
-/>
-```
-
-2. 检查排序参数
-```typescript
-const handleSort = useCallback((sortValueArr, sortValueStr, sortedData) => {
-  console.log('排序参数:', sortValueStr);  // 如 "name desc,age asc"
-  fetchData({ sort: sortValueStr });
-}, [fetchData]);
-```
-
-## 弹窗问题
-
-### 问题：弹窗无法关闭
-
-**解决方案：**
-
-1. 检查 maskClosable
-```typescript
-<CenterModal maskClosable={true} />
-```
-
-2. 检查 handleCancel
-```typescript
-<CenterModal
-  handleCancel={() => setOpen(false)}
-/>
-```
-
-### 问题：弹窗状态管理混乱
-
-**解决方案：**
-
-使用 useCenterModalState Hook
-```typescript
-const [modalProps, setModalProps, closeModal] = useCenterModalState();
-
-// 打开
-setModalProps({ open: true, title: '标题' });
-
-// 关闭
-closeModal();
-```
-
-## 常见错误
-
-### TypeError: Cannot read property of undefined
-
-**原因：** 组件未正确初始化或配置缺失
-
-**解决方案：**
-```typescript
-// 确保 ConfigProvider 正确配置
-<ConfigProvider config={config}>
+  }}
+>
   <App />
 </ConfigProvider>
 ```
 
-### Error: tableId is required
+## 10. 排查顺序建议
 
-**原因：** TableMax 缺少 tableId
+出现组件库问题时，按这个顺序判断：
 
-**解决方案：**
-```typescript
-<TableMax tableId="unique-id" />
-```
-
-### Error: Cannot read property 'name' of undefined
-
-**原因：** 列配置缺少 id
-
-**解决方案：**
-```typescript
-const columns = [
-  { id: 'name', header: '姓名', accessorKey: 'name' }, // 必须有 id
-];
-```
-
-### Error: isAllowedTo is not a function
-
-**原因：** 未正确使用 PermissionContext
-
-**解决方案：**
-```typescript
-import PermissionContext from '@arim-aisdc/public-components/esm/Permission/Context';
-
-const { isAllowedTo } = useContext(PermissionContext);
-```
-
-## 调试技巧
-
-### 1. 启用日志
-
-```typescript
-<TableMax
-  onFilteringChange={(data) => console.log('筛选变化:', data)}
-  onSortingChange={(data) => console.log('排序变化:', data)}
-  onSelectChange={(row, original, selected) => console.log('选择变化:', row, selected)}
-/>
-```
-
-### 2. 检查缓存
-
-```typescript
-// 查看所有表格缓存
-Object.keys(localStorage)
-  .filter(key => key.startsWith('TableMax'))
-  .forEach(key => {
-    console.log(key, localStorage.getItem(key));
-  });
-
-// 查看页面缓存
-Object.keys(localStorage)
-  .filter(key => key.includes('HBIS_PAGE_CACHE'))
-  .forEach(key => {
-    console.log(key, localStorage.getItem(key));
-  });
-```
-
-### 3. 检查配置
-
-```typescript
-const config = useConfig();
-console.log('全局配置:', config);
-```
-
-### 4. 检查权限
-
-```typescript
-const { isAllowedTo } = useContext(PermissionContext);
-console.log('当前权限检查:', isAllowedTo(['user:read']));
-```
-
-### 5. 检查翻译
-
-```typescript
-const [t, localeCode] = useTranslation();
-console.log('当前语言:', localeCode);
-console.log('翻译 global.title:', t('global.title'));
-```
-
-## 性能问题
-
-### 问题：表格渲染慢
-
-**解决方案：**
-
-1. 开启虚拟列表
-```typescript
-<TableMax enableVirtualList={true} />
-```
-
-2. 减少 re-render
-```typescript
-const columns = useMemo(() => [...], []);
-const handleSort = useCallback(() => {}, []);
-```
-
-3. 减少 memo 范围
-```typescript
-<TableMax openMemo={false} />
-```
-
-4. 使用 openVirtualColumns 和 openVirtualRows
-```typescript
-<TableMax
-  openVirtualColumns={true}
-  openVirtualRows={true}
-/>
-```
-
-### 问题：表单提交慢
-
-**解决方案：**
-
-1. 减少表单字段
-2. 使用异步校验
-3. 优化网络请求
-
-## 联系支持
-
-如果以上方法都无法解决问题，请检查：
-
-1. 组件库版本是否正确
-```bash
-npm list @arim-aisdc/public-components
-```
-
-2. 依赖是否完整
-```bash
-npm install
-```
-
-3. 浏览器控制台是否有错误信息
+1. 是否是根包公开导出
+2. 属性名是否与当前源码一致
+3. 是否误用了旧文档示例
+4. 是否需要从对应 `type.ts` 再确认

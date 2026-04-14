@@ -1,177 +1,309 @@
 ---
 name: public-components-skill
-description: 专为前端开发设计的 AI 技能，帮助理解和使用 @arim-aisdc/public-components 组件库。当用户需要使用 TableMax 高级表格、CustomForm 自定义表单、SchemaForm 表单、ConfigProvider 全局配置、PermissionProvider 权限控制、ThemeProvider 主题系统、QueryFilter 筛选器、各种 Filter 组件、国际化支持、或任何组件库相关功能时使用此技能。支持 React、TypeScript、Ant Design 技术栈。
+description: 专为使用 `@arim-aisdc/public-components` 组件库的前端开发任务设计的 AI Skill。只要用户需求中出现 `import { ... } from '@arim-aisdc/public-components'`、提到该包名、或涉及其公开导出组件与 hooks，就应自动启用本 Skill。基于当前源码 `C:\Work_Files\public-components` 校准，优先使用真实公共导出，避免生成不存在或未公开导出的 API。
 ---
 
 # Public Components Skill
 
-使用此技能来开发和构建使用 @arim-aisdc/public-components 组件库的前端应用。
+本 Skill 用于帮助 AI 正确理解和使用 `@arim-aisdc/public-components`。
 
-## 快速开始
+它的核心目标不是“尽量多猜组件库能力”，而是：
 
-### 安装组件库
+1. 以当前源码真实导出为准生成代码。
+2. 只推荐稳定的公共 API。
+3. 当用户项目里出现 `import { ... } from '@arim-aisdc/public-components'` 时自动切换到本 Skill 的约束与最佳实践。
 
-```bash
-npm install @arim-aisdc/public-components
+## 强制触发规则
+
+满足以下任一条件时，必须启用本 Skill：
+
+1. 用户明确提到 `@arim-aisdc/public-components`。
+2. 用户代码中出现：
+
+```ts
+import { Something } from "@arim-aisdc/public-components";
 ```
 
-### 基础配置
+3. 用户要开发、重构、排查、解释以下公共导出组件或 hooks：
+   `TableMax`、`CustomForm`、`QueryFilter`、`SchemaForm`、`ConfigProvider`、`useConfig`、`PermissionProvider`、`Restricted`、`PermissionContext`、`BaseInfo`、`CenterModal`、`DrawerCom`、`SplitPane`、`SplitterPane`、`CacheTabs`、`DraggableBox`、`ConditionExpression`、`Icon`、`Empty`、`FilterSelect`、`FilterInputNumber`、`FilterRadio`、`FilterSlider`、`FilterSwitch`、`FilterColor`、`useEventBus`、`events`、`usePageCacheState`、`useCenterModalState`、`public_zhCN`、`public_enUS`、`public_viVN`。
 
-在应用入口使用 ConfigProvider 配置全局设置：
+## 信息来源优先级
 
-```typescript
-import { ConfigProvider, public_zhCN } from '@arim-aisdc/public-components';
+回答和生成代码时，按以下优先级判断能力边界：
 
-<ConfigProvider
-  config={{
-    theme: 'light',
-    userId: 'user123',
-    locale: public_zhCN,
-    dateFormat: 'YYYY-MM-DD HH:mm',
-  }}
->
-  <App />
-</ConfigProvider>
+1. `C:\Work_Files\public-components\src\index.ts`
+2. 对应组件的 `type.ts` / `index.ts` / 主实现文件
+3. 当前 skill 仓库中的参考文档
+
+如果源码与参考文档冲突，以源码为准。
+
+## 当前版本校准结果
+
+本 Skill 已按当前源码版本校准：
+
+- Skill 版本：`1.1.0`
+- 包名：`@arim-aisdc/public-components`
+- 当前版本：`2.3.91`
+- 主要技术栈：React、Ant Design 5、TanStack Table 8、TypeScript
+
+## 当前真实公共导出
+
+以下内容已在 `src/index.ts` 中公开导出，可直接从根包导入：
+
+```ts
+import {
+  PermissionContext,
+  PermissionProvider,
+  Restricted,
+  DraggableBox,
+  MessageTip,
+  ModalTip,
+  BaseInfo,
+  CenterModal,
+  DrawerCom,
+  CustomForm,
+  QueryFilter,
+  SplitPane,
+  SplitterPane,
+  TableMax,
+  ConditionExpression,
+  ConfigProvider,
+  useConfig,
+  FilterColor,
+  FilterInputNumber,
+  FilterRadio,
+  FilterSelect,
+  FilterSlider,
+  FilterSwitch,
+  SchemaForm,
+  Icon,
+  Empty,
+  CacheTabs,
+  useCenterModalState,
+  useEventBus,
+  events,
+  usePageCacheState,
+  public_zhCN,
+  public_enUS,
+  public_viVN,
+} from "@arim-aisdc/public-components";
 ```
 
-## 核心组件
+## 不要默认生成的内容
 
-### TableMax 高级表格
+以下能力虽然能在仓库里看到实现痕迹，但当前版本并没有在根入口公开导出，不能默认写成：
 
-基于 TanStack React Table 的强大表格组件，支持分页、排序、筛选、行选择、行编辑、行拖拽、虚拟滚动等功能。
+- `ThemeProvider`
+- `useTranslation`
+- `MicroComponent`
+- `ColorSelector`
 
-```typescript
+因此：
+
+1. 不要默认生成 `import { ThemeProvider } from '@arim-aisdc/public-components'`。
+2. 不要默认生成 `import { useTranslation } from '@arim-aisdc/public-components'`。
+3. 不要把内部文件路径当作公共 API，除非用户明确要求使用内部实现并接受风险。
+
+## 关键使用准则
+
+### 1. TableMax
+
+`TableMax` 是组件库核心表格组件。生成代码时优先遵守以下规则：
+
+- 始终提供唯一的 `tableId`。
+- 列定义优先参考 `TableMaxColumnType`。
+- 后端分页/排序/筛选场景下，优先使用 `manualSorting`、`manualFiltering`，并配合 `changePagination`、`onSortingChange`、`onFilteringChange`。
+- 大数据量场景再考虑 `enableVirtualList`、`openVirtualColumns`、`openVirtualRows`。
+- 不要继续推荐已废弃回调，优先用 `onSortingChange`、`onFilteringChange`。
+
+最常见骨架：
+
+```tsx
+import { TableMax, FilterType, type TableMaxColumnType } from "@arim-aisdc/public-components";
+
+const columns: TableMaxColumnType[] = [
+  {
+    id: "name",
+    header: "Name",
+    accessorKey: "name",
+    enableSorting: true,
+    enableColumnFilter: true,
+    filterType: FilterType.Input,
+  },
+];
+
 <TableMax
-  tableId="user-table"
+  tableId='user-table'
   columns={columns}
   datas={data}
   totalCount={total}
-  pageSize={20}
-  skipCount={0}
-  canSelection={true}
-  canFilter={true}
-  changePagination={handlePagination}
+  pageSize={pageSize}
+  skipCount={skipCount}
+  manualSorting
+  manualFiltering
   onSortingChange={handleSort}
   onFilteringChange={handleFilter}
-/>
+  changePagination={handlePagination}
+/>;
 ```
 
-完整 API 和详细用法见 [references/table-max.md](references/table-max.md)
+### 2. ConfigProvider
 
-### ConfigProvider 全局配置
+涉及全局配置时，优先从根部包裹：
 
-提供全局配置能力，包括主题、国际化、表格缓存等。
+```tsx
+import { ConfigProvider, public_zhCN } from "@arim-aisdc/public-components";
 
-完整配置选项见 [references/config-provider.md](references/config-provider.md)
-
-### PermissionProvider 权限控制
-
-提供细粒度的权限控制能力。
-
-```typescript
-<PermissionProvider permissions={['user:read', 'user:write']}>
+<ConfigProvider
+  config={{
+    theme: "light",
+    userId: "u-001",
+    locale: public_zhCN,
+    dateFormat: "YYYY-MM-DD HH:mm",
+  }}>
   <App />
-</PermissionProvider>
-
-<Restricted permissions={['user:write']}>
-  <Button>编辑</Button>
-</Restricted>
+</ConfigProvider>;
 ```
 
-详细用法见 [references/permission.md](references/permission.md)
+重点提醒：
 
-### Filter 组件系列
+- `ConfigProvider` 内部已经集成 `react-dnd` 的 `DndProvider`。
+- 主题变量通过 `variablesJson` 注入。
+- 全局配置读取优先使用 `useConfig()`。
 
-提供各种筛选组件，包括 FilterSelect、FilterInputNumber、FilterSlider、FilterSwitch、FilterColor、FilterRadio、ConditionExpression。
+### 3. Permission
 
-详细用法见 [references/filter-components.md](references/filter-components.md)
+权限体系优先使用：
 
-## Hooks
-
-### useTranslation
-
-国际化翻译 Hook，支持嵌套键查找、占位符替换和数组翻译辅助函数（tT、tQ、tF、tB）。
-
-### useEventBus
-
-全局事件总线 Hook，用于跨组件通信。
-
-### usePageCacheState
-
-自动缓存页面状态到 localStorage，刷新页面后自动恢复。
-
-### useCenterModalState
-
-简化 CenterModal 状态管理的 Hook。
-
-### useConfig
-
-获取 ConfigProvider 提供的全局配置。
-
-详细用法见 [references/hooks.md](references/hooks.md)
-
-## 其他核心组件
-
-- **ThemeProvider** - 主题系统
-- **SchemaForm** - Schema 驱动表单
-- **CustomForm** - 自定义表单
-- **QueryFilter** - 查询筛选器
-- **Empty** - 空状态组件
-- **CenterModal** - 居中弹窗
-- **DrawerCom** - 抽屉组件
-- **SplitPane** - 分割面板
-- **DraggableBox** - 可拖拽盒子
-- **Icon** - 图标组件
-- **CacheTabs** - 缓存标签页
-- **BaseInfo** - 基础信息展示
-
-详细用法见 [references/other-components.md](references/other-components.md)
-
-## 最佳实践
-
-- 使用 useMemo 缓存列配置
-- 使用 useCallback 缓存事件处理函数
-- 大数据量时开启虚拟列表
-- 每个表格必须设置唯一的 tableId
-- 通过 ConfigProvider 设置用户 ID 实现缓存隔离
-- 使用 judgeHasPermission 工具函数进行权限判断
-- 使用 to() 工具函数进行 Promise 错误处理
-
-详细最佳实践见 [references/best-practices.md](references/best-practices.md)
-
-## 故障排查
-
-遇到问题？查看常见问题解决方案：
-- 表格缓存问题
-- 主题不生效
-- 权限不生效
-- 国际化不生效
-- 性能问题
-
-详细故障排查指南见 [references/troubleshooting.md](references/troubleshooting.md)
-
-## 工具函数
-
-```typescript
-import { getTextWidth, to, judgeHasPermission } from '@arim-aisdc/public-components';
-
-// 计算文本宽度
-const width = getTextWidth('Hello World', 14);
-
-// Promise 错误处理
-const [error, data] = await to(fetchUserData());
-
-// 权限数组比较
-const hasPermission = judgeHasPermission(['user:write'], userPermissions);
+```tsx
+import { PermissionProvider, Restricted, PermissionContext } from "@arim-aisdc/public-components";
 ```
 
-## 技术栈
+生成代码时注意：
 
-- React: >=17.0.1
-- Ant Design: ^5.27.3
-- @tanstack/react-table: ^8.9.1
-- TypeScript: 支持
+- `PermissionProvider` 需要 `permissions: string[]`
+- `Restricted` 适合做视图裁剪
+- `PermissionContext` 适合在组件内读取权限上下文
 
-## 组件库版本
+### 4. CustomForm / QueryFilter / SchemaForm
 
-@arim-aisdc/public-components v2.3.77
+表单类组件生成时遵循：
+
+- `CustomForm` 使用 `CustomFormItemType` 与 `CustomSearchFieldType`
+- `QueryFilter` 使用自身的 `FormItemType` / `searchFieldType`
+- `SchemaForm` 使用 `FieldDefinitionDto`、`ProFieldValueTypeEnum`、`DataSourceTypeEnum`
+
+不要混用三套表单配置类型。
+
+### 5. Hooks
+
+当前从根包稳定可用的 hooks / 事件能力：
+
+- `useCenterModalState`
+- `useEventBus`
+- `events`
+- `usePageCacheState`
+- `useConfig`
+
+其中：
+
+- `usePageCacheState` 默认基于 `localStorage` 做页面缓存，缓存有效期约 1 小时
+- `useEventBus` 会在组件卸载时自动移除监听
+- `useCenterModalState` 基于 `open` 字段控制 `CenterModal`
+
+### 6. 国际化
+
+当前根包公开的是语言包对象，而不是 `useTranslation`：
+
+```ts
+import { public_zhCN, public_enUS, public_viVN } from "@arim-aisdc/public-components";
+```
+
+如果用户要做 locale 配置，优先指导其通过 `ConfigProvider` 的 `locale` 完成，而不是默认生成 `useTranslation` 的导入代码。
+
+## 额外导入约束
+
+如果用户需要工具函数，可优先考虑以下路径，而不是误写到根导出：
+
+```ts
+import { to, getTextWidth, judgeHasPermission } from "@arim-aisdc/public-components/utils";
+```
+
+如果用户需要主题变量文件，可再根据实际场景考虑：
+
+```ts
+import { publicThemeMap } from "@arim-aisdc/public-components/themes/variablesConfig";
+```
+
+只有在用户明确需要这些能力时才这样写，不要无故扩大依赖面。
+
+## 生成代码时的默认检查清单
+
+在使用本 Skill 时，AI 应默认执行以下检查：
+
+1. 先判断用户写的是根包导入还是内部路径导入。
+2. 若是根包导入，只使用 `src/index.ts` 已公开的导出。
+3. 若要补充 props / type，去对应组件 `type.ts` 校对后再写。
+4. 如果参考文档和源码冲突，明确说明“按当前源码修正”。
+5. 若用户请求里出现不存在的导出，主动纠正并给出替代写法。
+
+## 常见纠偏
+
+### 错误示例 1
+
+```ts
+import { ThemeProvider } from "@arim-aisdc/public-components";
+```
+
+处理方式：
+
+- 不要直接沿用。
+- 先说明当前根入口未公开导出 `ThemeProvider`。
+- 再改为 `ConfigProvider` 方案，或询问是否允许使用内部路径。
+
+### 错误示例 2
+
+```ts
+import { useTranslation } from "@arim-aisdc/public-components";
+```
+
+处理方式：
+
+- 先说明当前版本根包未公开导出 `useTranslation`。
+- 若只是做多语言配置，改用 `ConfigProvider + public_zhCN/public_enUS/public_viVN`。
+
+### 错误示例 3
+
+```ts
+import { ColorSelector } from "@arim-aisdc/public-components";
+```
+
+处理方式：
+
+- 不要生成。
+- 说明它是内部实现依赖，不是当前根包公共 API。
+
+## 回答风格要求
+
+使用本 Skill 时，AI 应：
+
+- 优先给出可直接运行的导入与类型写法
+- 明确区分“公共 API”和“内部实现”
+- 在表格、表单、权限、缓存等场景主动补充最佳实践
+- 遇到源码与旧文档不一致时，直接按源码修正，不延续旧说法
+
+## 维护说明
+
+本 Skill 基于以下源码快照校准：
+
+- Skill 版本：`1.1.0`
+- 组件库源码目录：`public-components`
+- 核对入口：`public-components\src\index.ts`
+
+当该组件库版本升级后，应优先重新检查：
+
+1. `src/index.ts` 导出变化
+2. `TableMax` 类型变化
+3. `ConfigProvider` 与 `useConfig` 变化
+4. 表单枚举与类型变化
+5. 是否新增正式公开导出
