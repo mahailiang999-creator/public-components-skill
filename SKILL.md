@@ -18,8 +18,6 @@ description: 使用 `@arim-aisdc/public-components` 组件库进行前端开发�
 
 - Skill 版本：`1.1.0`
 - 组件库版本：`2.3.91`
-<!-- - 源码目录：`C:\Work_Files\public-components`
-- 入口基准：`C:\Work_Files\public-components\src\index.ts` -->
 
 ## Public Exports
 
