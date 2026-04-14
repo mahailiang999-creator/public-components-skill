@@ -39,6 +39,8 @@
 - `CacheTabs`
 - `DraggableBox`
 - `ConditionExpression`
+- `Icon`
+- `Empty`
 - `FilterSelect`
 - `FilterInputNumber`
 - `FilterRadio`
@@ -94,4 +96,6 @@ AI 就应该自动套用本 Skill 的规则。
 - `references/`：补充说明文档
 - `references/source-consistency-checklist.md`：references 与源码实现差异清单
 
-如果 `references/` 与源码不一致，应优先以 `SKILL.md` 和组件库源码为准。
+默认先以 `SKILL.md` 和对应 `references/` 为准完成任务。
+
+只有在出现 TypeScript 报错、类型不匹配、导出异常，或者现有说明无法覆盖问题时，再回到 `public-components` 源码仓库核对 `src/index.ts`、组件 `type.ts` 与实现文件。

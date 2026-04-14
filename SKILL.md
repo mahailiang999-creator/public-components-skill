@@ -5,14 +5,22 @@ description: 使用 `@arim-aisdc/public-components` 组件库进行前端开发�
 
 # Public Components Skill
 
-按当前源码真实导出使用 `@arim-aisdc/public-components`。
+先以本 Skill 仓库文档为准使用 `@arim-aisdc/public-components`；只有在出现 TypeScript 报错、类型不匹配、导出不一致或文档无法覆盖的场景时，再回到源码核对。
 
 ## Core Rules
 
-1. 优先以根包公开导出为准，不猜测不存在的 API。
-2. 遇到文档与源码冲突时，以源码为准。
-3. 优先读取对应 `type.ts`、`index.ts`、组件主实现文件，再决定示例和写法。
-4. 只在用户明确接受风险时才建议内部路径导入。
+1. 默认先以本仓库 `SKILL.md` 与对应 `references/` 文档为准，不先展开源码排查。
+2. 仍然以根包公开导出边界为准，不猜测不存在的 API。
+3. 只有在出现 TypeScript 报错、类型不匹配、导出异常或文档覆盖不到的细节时，才回到源码核对。
+4. 遇到文档与源码冲突时，以源码为准，并同步修正文档认知。
+5. 只在用户明确接受风险时才建议内部路径导入。
+
+## Source Calibration Prerequisite
+
+- 默认校准基线就是本仓库的 `SKILL.md` 与相关 `references/`。
+- 只有在当前任务环境能访问 `public-components` 源码仓库，且已经出现 TypeScript 报错、类型不匹配、导出不一致或说明缺口时，才执行 `src/index.ts`、组件 `type.ts`、实现文件的补充校准。
+- 如果当前环境不能直接访问源码，则继续以本仓库文档输出，并明确说明“当前结论基于 Skill 文档基线”。
+- 一旦后续获得源码访问权限，再回到源码重新确认公开导出、类型边界与实现差异。
 
 ## Version
 
@@ -127,10 +135,12 @@ import { publicThemeMap } from '@arim-aisdc/public-components/themes/variablesCo
 处理 `@arim-aisdc/public-components` 任务时，按以下顺序工作：
 
 1. 先判断用户写的是根包导入还是内部路径导入。
-2. 若是根包导入，只使用 `src/index.ts` 已公开的导出。
+2. 先读取本仓库 `SKILL.md` 的相关规则。
 3. 再读取当前任务对应的 reference 文档。
-4. 若需要 props、枚举、类型细节，继续查对应组件 `type.ts`。
-5. 若文档与源码冲突，直接按源码修正输出。
+4. 先按 Skill 文档基线输出，不额外展开源码排查。
+5. 若出现 TypeScript 报错、类型不匹配、导出异常、示例无法落地，或 reference 未覆盖关键细节，再判断当前环境能否访问 `public-components` 源码仓库。
+6. 若能访问源码，再查 `src/index.ts`、对应组件 `type.ts` 与主实现文件。
+7. 若文档与源码冲突，直接按源码修正输出，并把冲突视为后续需要回写文档的信号。
 
 ## Task-Specific Notes
 
