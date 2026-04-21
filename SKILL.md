@@ -1,33 +1,36 @@
----
+﻿---
 name: public-components-skill
-description: 使用 `@arim-aisdc/public-components` 组件库进行前端开发、重构、排查、解释或生成代码时使用本 Skill。只要用户需求、代码片段或报错中出现 `import { ... } from '@arim-aisdc/public-components'`、提到该包名、或涉及其根包公开导出的组件、hooks、类型、locale 与工具路径，即触发本 Skill。优先依据当前源码真实公共导出生成代码，避免使用未公开导出或仅内部可见的 API；尤其适用于 `TableMax`、`CustomForm`、`QueryFilter`、`SchemaForm`、`ConfigProvider/useConfig`、权限体系、Filter 系列、缓存、事件总线和 locale 配置场景。
+description: 使用 `@arim-aisdc/public-components` 组件库进行前端开发、重构、排查、解释或生成代码时使用本 Skill。只要用户需求、代码片段或报错中出现 `import { ... } from '@arim-aisdc/public-components'`、提到该包名，或涉及其根包公开导出的组件、hooks、类型、locale 与工具路径，即触发本 Skill。优先依据当前 Skill 仓库文档与真实公共导出生成代码，避免使用未公开导出或仅内部可见的 API；涉及页面开发时，默认同时遵守本 Skill 集成的 UI 一致性基线，尤其适用于 `TableMax`、`CustomForm`、`QueryFilter`、`SchemaForm`、`ConfigProvider/useConfig`、权限体系、Filter 系列、缓存、事件总线和 locale 配置场景。
 ---
 
 # Public Components Skill
 
-先以本 Skill 仓库文档为准使用 `@arim-aisdc/public-components`；只有在出现 TypeScript 报错、类型不匹配、导出不一致或文档无法覆盖的场景时，再回到源码核对。
+优先以本 Skill 仓库文档为准使用 `@arim-aisdc/public-components`；只有在出现 TypeScript 报错、类型不匹配、导出不一致，或文档无法覆盖关键细节时，再回到源码校对。
 
-## Core Rules
+当任务涉及页面开发、页面重构、列表页、表单页、弹窗页、详情页、区块式表格、`TableMax` 页面组合，或用户明确要求“保持项目现有 UI 风格”时，应默认启用本 Skill 内置的 UI 一致性约束。本 Skill 自身就承担 UI 约束职责。
+
+## 核心规则
 
 1. 默认先以本仓库 `SKILL.md` 与对应 `references/` 文档为准，不先展开源码排查。
-2. 仍然以根包公开导出边界为准，不猜测不存在的 API。
-3. 只有在出现 TypeScript 报错、类型不匹配、导出异常或文档覆盖不到的细节时，才回到源码核对。
+2. 仍然以根包公共导出边界为准，不猜测不存在的 API。
+3. 只有在出现 TypeScript 报错、类型不匹配、导出异常或文档覆盖不到的细节时，才回到源码校对。
 4. 遇到文档与源码冲突时，以源码为准，并同步修正文档认知。
-5. 只在用户明确接受风险时才建议内部路径导入。
+5. 只有在用户明确接受风险时，才建议内部路径导入。
+6. 只要任务涉及页面 UI 实现或重构，就默认同时遵守 `references/ui-consistency.md` 中的页面结构、间距、标题层级、主题 token 与操作区约束。
 
-## Source Calibration Prerequisite
+## 源码校准前提
 
 - 默认校准基线就是本仓库的 `SKILL.md` 与相关 `references/`。
 - 只有在当前任务环境能访问 `public-components` 源码仓库，且已经出现 TypeScript 报错、类型不匹配、导出不一致或说明缺口时，才执行 `src/index.ts`、组件 `type.ts`、实现文件的补充校准。
 - 如果当前环境不能直接访问源码，则继续以本仓库文档输出，并明确说明“当前结论基于 Skill 文档基线”。
-- 一旦后续获得源码访问权限，再回到源码重新确认公开导出、类型边界与实现差异。
+- 一旦后续获得源码访问权限，再回到源码重新确认公共导出、类型边界与实现差异。
 
-## Version
+## 版本
 
-- Skill 版本：`1.1.0`
+- Skill 版本：`v1.2.0`
 - 组件库版本：`2.3.91`
 
-## Public Exports
+## 公共导出
 
 当前应默认视为根包公开可用的重点能力：
 
@@ -64,7 +67,7 @@ description: 使用 `@arim-aisdc/public-components` 组件库进行前端开发�
 - `public_enUS`
 - `public_viVN`
 
-## Do Not Generate By Default
+## 默认情况下不生成
 
 不要默认生成以下根包导入：
 
@@ -79,7 +82,7 @@ description: 使用 `@arim-aisdc/public-components` 组件库进行前端开发�
 2. 提供根包内可替代方案。
 3. 仅在用户明确要求时再讨论内部路径。
 
-## Import Rules
+## 引用规则
 
 根包正确示例：
 
@@ -99,14 +102,14 @@ import { to, getTextWidth, judgeHasPermission } from '@arim-aisdc/public-compone
 import { publicThemeMap } from '@arim-aisdc/public-components/themes/variablesConfig';
 ```
 
-## Reference Map
+## 参考文档
 
 按任务类型读取对应参考文档，不要一次性把全部 `references/` 装入上下文。
 
 - 涉及 `TableMax`、列定义、分页、排序、筛选、拖拽、虚拟滚动：
   读取 `references/table-max.md`
 
-- 涉及 `ConfigProvider`、`useConfig`、全局主题变量、locale、tableMax 全局配置：
+- 涉及 `ConfigProvider`、`useConfig`、全局主题变量、locale、`TableMax` 全局配置：
   读取 `references/config-provider.md`
 
 - 涉及 `PermissionProvider`、`Restricted`、`PermissionContext`、权限判断：
@@ -124,25 +127,41 @@ import { publicThemeMap } from '@arim-aisdc/public-components/themes/variablesCo
 - 涉及实现建议、推荐写法、默认约束：
   读取 `references/best-practices.md`
 
+- 涉及页面开发、页面重构、列表页、详情页、表单页、弹窗页、区块式表格、UI 风格对齐：
+  读取 `references/ui-consistency.md`
+
 - 涉及报错排查、行为异常、旧文档纠偏：
   读取 `references/troubleshooting.md`
 
 - 涉及“文档说法”和“源码实现”是否完全一致：
   读取 `references/source-consistency-checklist.md`
 
-## Task Workflow
+## 任务流程
 
 处理 `@arim-aisdc/public-components` 任务时，按以下顺序工作：
 
 1. 先判断用户写的是根包导入还是内部路径导入。
 2. 先读取本仓库 `SKILL.md` 的相关规则。
 3. 再读取当前任务对应的 reference 文档。
-4. 先按 Skill 文档基线输出，不额外展开源码排查。
-5. 若出现 TypeScript 报错、类型不匹配、导出异常、示例无法落地，或 reference 未覆盖关键细节，再判断当前环境能否访问 `public-components` 源码仓库。
-6. 若能访问源码，再查 `src/index.ts`、对应组件 `type.ts` 与主实现文件。
-7. 若文档与源码冲突，直接按源码修正输出，并把冲突视为后续需要回写文档的信号。
+4. 如果任务落在页面开发或页面重构场景，必须补读 `references/ui-consistency.md`。
+5. 先按 Skill 文档基线输出，不额外展开源码排查。
+6. 若出现 TypeScript 报错、类型不匹配、导出异常、示例无法落地，或 reference 未覆盖关键细节，再判断当前环境能否访问 `public-components` 源码仓库。
+7. 若能访问源码，再查 `src/index.ts`、对应组件 `type.ts` 与主实现文件。
+8. 若文档与源码冲突，直接按源码修正输出，并把冲突视为后续需要回写文档的信号。
 
-## Task-Specific Notes
+## UI 一致性默认约束
+
+当任务涉及页面 UI 时，默认同时满足以下要求：
+
+- 优先复用当前项目中已经存在的页面骨架和布局模式。
+- 优先使用项目主题 token，而不是硬编码颜色。
+- 间距、标题层级、操作区布局应与附近页面保持一致。
+- 对 `TableMax` 页面，优先延续项目既有的筛选区、主操作区、列顺序、工具栏和表格间距模式。
+- 如果原型与现有项目模式冲突，优先保留项目一致性，再做最小必要偏离。
+
+更完整的 UI 基线规则见 `references/ui-consistency.md`。
+
+## 任务-具体说明
 
 ### TableMax
 
@@ -176,7 +195,7 @@ import { publicThemeMap } from '@arim-aisdc/public-components/themes/variablesCo
 - 根包公开的是 `public_zhCN`、`public_enUS`、`public_viVN`
 - 不要默认写 `import { useTranslation } from '@arim-aisdc/public-components'`
 
-## Correction Patterns
+## 修正的模式
 
 错误：
 
@@ -210,13 +229,3 @@ import { ColorSelector } from '@arim-aisdc/public-components';
 
 - 不生成该导入
 - 说明这是内部实现，不是根包公共 API
-
-## Maintenance
-
-组件库升级后，优先重新检查：
-
-1. `src/index.ts` 导出变化
-2. `TableMax` 类型变化
-3. `ConfigProvider` / `useConfig` 变化
-4. 表单枚举与类型变化
-5. `references/source-consistency-checklist.md` 中记录的源码级差异是否已消除
