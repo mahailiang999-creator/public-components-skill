@@ -2,6 +2,13 @@
 
 本文档用于记录当前 `references/` 文档与 `\public-components` 源码之间的一致性状态。
 
+## 2026-05-12 校准记录
+
+- 组件库源码基线版本更新为 `2.3.92`，来源：`C:\Work_Files\public-components\package.json`。
+- 重新核对 `src/index.ts` 根包导出，确认 `MessageTip` 与 `ModalTip` 当前已公开导出。
+- `SKILL.md`、`README.md`、`references/other-components.md` 与 `references/best-practices.md` 已补齐 `MessageTip` / `ModalTip`。
+- `ThemeProvider`、`useTranslation`、`ColorSelector`、`MicroComponent` 仍不应默认作为根包公开 API 使用。
+
 原则：
 
 1. 能与源码保持一致的，已经全部按源码修正。

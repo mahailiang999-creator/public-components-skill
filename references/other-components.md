@@ -222,6 +222,74 @@ import { Icon } from '@arim-aisdc/public-components';
 - `animationData?`
 - `animationType?: 'loop' | 'click' | 'hover'`
 
+## MessageTip
+
+根包导入：
+
+```ts
+import { MessageTip, type MessageTipPropTypes, type tipType } from '@arim-aisdc/public-components';
+```
+
+常用方法：
+
+- `MessageTip.success(info)`
+- `MessageTip.error(info)`
+- `MessageTip.attention(info)`
+- `MessageTip.info(info)`
+- `MessageTip.loading(info)`
+
+`info` 常用字段：
+
+- `key?: string`
+- `content?: any`
+- `duration?: number`
+- `onClose?: any`
+
+注意：
+
+- 这是当前根包公开导出的全局提示能力。
+- 优先用于轻量消息反馈，不要再从内部 `GlobalTip/MessageTip` 路径导入。
+
+## ModalTip
+
+根包导入：
+
+```ts
+import { ModalTip, type ModalTipType, type ModalDeleteType } from '@arim-aisdc/public-components';
+```
+
+常用方法：
+
+- `ModalTip.loading(info)`
+- `ModalTip.success(info)`
+- `ModalTip.error(info)`
+- `ModalTip.info(info)`
+- `ModalTip.attention(info)`
+- `ModalTip.delete(info)`
+
+`ModalTipType` 常用字段：
+
+- `type?: 'loading' | 'success' | 'error' | 'info' | 'attention'`
+- `title?: string | JSX.Element`
+- `content?: string | JSX.Element`
+- `duration?: number`
+- `afterClose?: () => void`
+
+`ModalDeleteType` 常用字段：
+
+- `handlerConfirm: () => void`
+- `handlerCancel?: () => void`
+- `title?: string`
+- `content?: string`
+- `okText?: string`
+- `cancelText?: string`
+- `centered?: boolean`
+
+注意：
+
+- `ModalTip` 已从根包公开导出，适合全局确认、删除确认和状态型弹窗提示。
+- 不要为了使用 `themeStyle` 或内部工具而默认引入内部路径；只有用户明确要求内部能力时再讨论风险。
+
 ## CacheTabs
 
 根包导入：

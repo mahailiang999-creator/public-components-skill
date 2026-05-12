@@ -121,7 +121,22 @@ import { PermissionContext } from '@arim-aisdc/public-components';
 - `rowHeight`
 - 是否真的有大数据量
 
-## 10. 明确区分三类表单
+## 10. 全局提示优先使用根包导出
+
+推荐：
+
+```ts
+import { MessageTip, ModalTip } from '@arim-aisdc/public-components';
+```
+
+适用场景：
+
+- `MessageTip`：轻量成功、失败、注意、信息、加载提示。
+- `ModalTip`：全局状态弹窗、删除确认、操作结果反馈。
+
+不要默认写内部路径，例如 `components/GlobalTip/MessageTip` 或 `components/GlobalTip/ModalTip`。
+
+## 11. 明确区分三类表单
 
 - `CustomForm` 使用 `CustomFormItemType`
 - `QueryFilter` 使用 `FormItemType`

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Public Components"
+  short_description: "按真实公共导出使用 @arim-aisdc/public-components。"
+  default_prompt: "使用 $public-components-skill 帮我基于 @arim-aisdc/public-components 生成或排查代码。"
+
+policy:
+  allow_implicit_invocation: true

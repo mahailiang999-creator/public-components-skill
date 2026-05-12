@@ -1,231 +1,94 @@
-﻿---
+---
 name: public-components-skill
-description: 使用 `@arim-aisdc/public-components` 组件库进行前端开发、重构、排查、解释或生成代码时使用本 Skill。只要用户需求、代码片段或报错中出现 `import { ... } from '@arim-aisdc/public-components'`、提到该包名，或涉及其根包公开导出的组件、hooks、类型、locale 与工具路径，即触发本 Skill。优先依据当前 Skill 仓库文档与真实公共导出生成代码，避免使用未公开导出或仅内部可见的 API；涉及页面开发时，默认同时遵守本 Skill 集成的 UI 一致性基线，尤其适用于 `TableMax`、`CustomForm`、`QueryFilter`、`SchemaForm`、`ConfigProvider/useConfig`、权限体系、Filter 系列、缓存、事件总线和 locale 配置场景。
+description: Use when Codex 需要使用、生成、重构、排查或解释 `@arim-aisdc/public-components` 相关前端代码、imports、TypeScript errors、locale、root-package exports、`/utils`，或涉及 TableMax、CustomForm、QueryFilter、SchemaForm、ConfigProvider/useConfig、权限、Filter 系列、缓存、事件总线、MessageTip、ModalTip、页面 UI 一致性等场景。
 ---
 
 # Public Components Skill
 
-优先以本 Skill 仓库文档为准使用 `@arim-aisdc/public-components`；只有在出现 TypeScript 报错、类型不匹配、导出不一致，或文档无法覆盖关键细节时，再回到源码校对。
+使用本 Skill 来生成、审查或排查消费 `@arim-aisdc/public-components` 的代码。始终把组件库根入口导出视为公共 API 边界，并按任务类型只读取必要的 `references/` 文档。
 
-当任务涉及页面开发、页面重构、列表页、表单页、弹窗页、详情页、区块式表格、`TableMax` 页面组合，或用户明确要求“保持项目现有 UI 风格”时，应默认启用本 Skill 内置的 UI 一致性约束。本 Skill 自身就承担 UI 约束职责。
+## 源码基线
+
+- Skill 版本：`v1.2.0`
+- 组件库：`@arim-aisdc/public-components`
+- 源码基线：`C:\Work_Files\public-components`
+- 组件库版本：`2.3.92`
+
+如果 Skill 文档与可访问源码冲突，以源码为准，并把该冲突视为后续需要修正文档的漂移信号。
 
 ## 核心规则
 
-1. 默认先以本仓库 `SKILL.md` 与对应 `references/` 文档为准，不先展开源码排查。
-2. 仍然以根包公共导出边界为准，不猜测不存在的 API。
-3. 只有在出现 TypeScript 报错、类型不匹配、导出异常或文档覆盖不到的细节时，才回到源码校对。
-4. 遇到文档与源码冲突时，以源码为准，并同步修正文档认知。
-5. 只有在用户明确接受风险时，才建议内部路径导入。
-6. 只要任务涉及页面 UI 实现或重构，就默认同时遵守 `references/ui-consistency.md` 中的页面结构、间距、标题层级、主题 token 与操作区约束。
+1. 优先从 `@arim-aisdc/public-components` 根包导入。
+2. 不要编造 `src/index.ts` 或已记录二级路径没有公开的 API。
+3. 按任务类型读取相关 `references/` 文件，不要默认一次性加载全部 reference。
+4. 只要涉及页面开发或页面重构，就额外读取 `references/ui-consistency.md`。
+5. 只有当 reference 缺少关键细节、出现 TypeScript 报错，或导出/类型冲突时，才回到源码校对。
+6. 仅在用户明确接受风险时，才建议内部路径导入。
 
-## 源码校准前提
+## 根包公共导出
 
-- 默认校准基线就是本仓库的 `SKILL.md` 与相关 `references/`。
-- 只有在当前任务环境能访问 `public-components` 源码仓库，且已经出现 TypeScript 报错、类型不匹配、导出不一致或说明缺口时，才执行 `src/index.ts`、组件 `type.ts`、实现文件的补充校准。
-- 如果当前环境不能直接访问源码，则继续以本仓库文档输出，并明确说明“当前结论基于 Skill 文档基线”。
-- 一旦后续获得源码访问权限，再回到源码重新确认公共导出、类型边界与实现差异。
+默认可安全使用的常见根包导出：
 
-## 版本
+- 组件：`TableMax`、`CustomForm`、`QueryFilter`、`SchemaForm`、`ConfigProvider`、`PermissionProvider`、`Restricted`、`PermissionContext`、`BaseInfo`、`CenterModal`、`DrawerCom`、`SplitPane`、`SplitterPane`、`CacheTabs`、`DraggableBox`、`ConditionExpression`、`Icon`、`Empty`、`MessageTip`、`ModalTip`
+- Filter 系列：`FilterSelect`、`FilterInputNumber`、`FilterRadio`、`FilterSlider`、`FilterSwitch`、`FilterColor`
+- hooks 与事件：`useConfig`、`useEventBus`、`events`、`usePageCacheState`、`useCenterModalState`
+- locale：`public_zhCN`、`public_enUS`、`public_viVN`
 
-- Skill 版本：`v1.2.0`
-- 组件库版本：`2.3.91`
-
-## 公共导出
-
-当前应默认视为根包公开可用的重点能力：
-
-- `TableMax`
-- `CustomForm`
-- `QueryFilter`
-- `SchemaForm`
-- `ConfigProvider`
-- `useConfig`
-- `PermissionProvider`
-- `Restricted`
-- `PermissionContext`
-- `BaseInfo`
-- `CenterModal`
-- `DrawerCom`
-- `SplitPane`
-- `SplitterPane`
-- `CacheTabs`
-- `DraggableBox`
-- `ConditionExpression`
-- `Icon`
-- `Empty`
-- `FilterSelect`
-- `FilterInputNumber`
-- `FilterRadio`
-- `FilterSlider`
-- `FilterSwitch`
-- `FilterColor`
-- `useEventBus`
-- `events`
-- `usePageCacheState`
-- `useCenterModalState`
-- `public_zhCN`
-- `public_enUS`
-- `public_viVN`
-
-## 默认情况下不生成
-
-不要默认生成以下根包导入：
+不要默认把以下能力作为根包导入：
 
 - `ThemeProvider`
 - `useTranslation`
 - `ColorSelector`
 - `MicroComponent`
 
-如果用户请求这些能力：
+如果用户要求这些能力，先说明它们不是当前根包公共导出，再优先提供根包已公开的替代方案。
 
-1. 先说明当前根包未公开导出。
-2. 提供根包内可替代方案。
-3. 仅在用户明确要求时再讨论内部路径。
+## 导入模式
 
-## 引用规则
-
-根包正确示例：
+根包导入：
 
 ```ts
 import { TableMax, ConfigProvider, public_zhCN } from '@arim-aisdc/public-components';
 ```
 
-工具函数路径：
+工具函数：
 
 ```ts
 import { to, getTextWidth, judgeHasPermission } from '@arim-aisdc/public-components/utils';
 ```
 
-主题变量路径仅在必要时使用：
+主题变量仅在必要时使用：
 
 ```ts
 import { publicThemeMap } from '@arim-aisdc/public-components/themes/variablesConfig';
 ```
 
-## 参考文档
+## Reference 路由
 
-按任务类型读取对应参考文档，不要一次性把全部 `references/` 装入上下文。
-
-- 涉及 `TableMax`、列定义、分页、排序、筛选、拖拽、虚拟滚动：
-  读取 `references/table-max.md`
-
-- 涉及 `ConfigProvider`、`useConfig`、全局主题变量、locale、`TableMax` 全局配置：
-  读取 `references/config-provider.md`
-
-- 涉及 `PermissionProvider`、`Restricted`、`PermissionContext`、权限判断：
-  读取 `references/permission.md`
-
-- 涉及 `useEventBus`、`events`、`usePageCacheState`、`useCenterModalState`、`useConfig`：
-  读取 `references/hooks.md`
-
-- 涉及 `FilterSelect`、`FilterInputNumber`、`FilterSlider`、`FilterSwitch`、`FilterColor`、`FilterRadio`、`ConditionExpression`：
-  读取 `references/filter-components.md`
-
-- 涉及 `CustomForm`、`QueryFilter`、`SchemaForm`、`Empty`、`CenterModal`、`DrawerCom`、`SplitPane`、`SplitterPane`、`DraggableBox`、`Icon`、`CacheTabs`、`BaseInfo`：
-  读取 `references/other-components.md`
-
-- 涉及实现建议、推荐写法、默认约束：
-  读取 `references/best-practices.md`
-
-- 涉及页面开发、页面重构、列表页、详情页、表单页、弹窗页、区块式表格、UI 风格对齐：
-  读取 `references/ui-consistency.md`
-
-- 涉及报错排查、行为异常、旧文档纠偏：
-  读取 `references/troubleshooting.md`
-
-- 涉及“文档说法”和“源码实现”是否完全一致：
-  读取 `references/source-consistency-checklist.md`
+- `TableMax`、列定义、分页、排序、筛选、拖拽、虚拟行/列：读取 `references/table-max.md`。
+- `ConfigProvider`、`useConfig`、主题变量、locale、TableMax 全局配置：读取 `references/config-provider.md`。
+- `PermissionProvider`、`Restricted`、`PermissionContext`、权限判断：读取 `references/permission.md`。
+- `useEventBus`、`events`、`usePageCacheState`、`useCenterModalState`、hook 行为：读取 `references/hooks.md`。
+- `FilterSelect`、`FilterInputNumber`、`FilterSlider`、`FilterSwitch`、`FilterColor`、`FilterRadio`、`ConditionExpression`：读取 `references/filter-components.md`。
+- `CustomForm`、`QueryFilter`、`SchemaForm`、`Empty`、`CenterModal`、`DrawerCom`、`SplitPane`、`SplitterPane`、`DraggableBox`、`Icon`、`CacheTabs`、`BaseInfo`、`MessageTip`、`ModalTip`：读取 `references/other-components.md`。
+- 推荐写法与防漂移规则：读取 `references/best-practices.md`。
+- 页面开发、页面重构、列表页、详情页、表单页、弹窗页、区块式表格、UI 一致性：读取 `references/ui-consistency.md`。
+- 报错、异常行为、旧文档、导出或类型不匹配：读取 `references/troubleshooting.md`。
+- reference 与源码一致性记录：读取 `references/source-consistency-checklist.md`。
 
 ## 任务流程
 
-处理 `@arim-aisdc/public-components` 任务时，按以下顺序工作：
+1. 先判断用户代码使用的是根包、`/utils`、主题变量路径，还是内部路径。
+2. 生成 import 前，先确认公共导出边界。
+3. 按上面的 reference 路由读取当前任务需要的文档。
+4. 如果是 UI 或页面任务，把 `references/ui-consistency.md` 作为额外约束。
+5. 按已记录公共 API 生成代码。
+6. 如果细节缺失或 TypeScript 结果不一致，再查看源码基线文件并修正输出。
 
-1. 先判断用户写的是根包导入还是内部路径导入。
-2. 先读取本仓库 `SKILL.md` 的相关规则。
-3. 再读取当前任务对应的 reference 文档。
-4. 如果任务落在页面开发或页面重构场景，必须补读 `references/ui-consistency.md`。
-5. 先按 Skill 文档基线输出，不额外展开源码排查。
-6. 若出现 TypeScript 报错、类型不匹配、导出异常、示例无法落地，或 reference 未覆盖关键细节，再判断当前环境能否访问 `public-components` 源码仓库。
-7. 若能访问源码，再查 `src/index.ts`、对应组件 `type.ts` 与主实现文件。
-8. 若文档与源码冲突，直接按源码修正输出，并把冲突视为后续需要回写文档的信号。
+## 高风险错误
 
-## UI 一致性默认约束
-
-当任务涉及页面 UI 时，默认同时满足以下要求：
-
-- 优先复用当前项目中已经存在的页面骨架和布局模式。
-- 优先使用项目主题 token，而不是硬编码颜色。
-- 间距、标题层级、操作区布局应与附近页面保持一致。
-- 对 `TableMax` 页面，优先延续项目既有的筛选区、主操作区、列顺序、工具栏和表格间距模式。
-- 如果原型与现有项目模式冲突，优先保留项目一致性，再做最小必要偏离。
-
-更完整的 UI 基线规则见 `references/ui-consistency.md`。
-
-## 任务-具体说明
-
-### TableMax
-
-- 始终提供唯一 `tableId`
-- 后端联动优先使用 `changePagination`、`onSortingChange`、`onFilteringChange`
-- 需要大数据量优化时再考虑 `enableVirtualList`、`openVirtualColumns`、`openVirtualRows`
-
-### ConfigProvider
-
-- 优先在应用根部包裹
-- 优先通过 `locale` 配置语言包
-- 优先通过 `variablesJson` 注入主题变量
-- 通过 `useConfig()` 读取全局配置
-
-### Permission
-
-- `PermissionProvider` 需要 `permissions: string[]`
-- `Restricted` 当前只支持 `requiredPermissions`、`isPage`、`children`
-- 不要继续编造 `fallback` prop
-
-### Forms
-
-不要混用三套表单配置模型：
-
-- `CustomForm` 使用 `CustomFormItemType`
-- `QueryFilter` 使用 `FormItemType`
-- `SchemaForm` 对外使用 `formConfig`
-
-### Locale
-
-- 根包公开的是 `public_zhCN`、`public_enUS`、`public_viVN`
-- 不要默认写 `import { useTranslation } from '@arim-aisdc/public-components'`
-
-## 修正的模式
-
-错误：
-
-```ts
-import { ThemeProvider } from '@arim-aisdc/public-components';
-```
-
-修正：
-
-- 说明当前根包未公开导出 `ThemeProvider`
-- 优先改成 `ConfigProvider` 方案
-
-错误：
-
-```ts
-import { useTranslation } from '@arim-aisdc/public-components';
-```
-
-修正：
-
-- 说明当前根包未公开导出 `useTranslation`
-- 若只是多语言接入，改成 `ConfigProvider + public_zhCN/public_enUS/public_viVN`
-
-错误：
-
-```ts
-import { ColorSelector } from '@arim-aisdc/public-components';
-```
-
-修正：
-
-- 不生成该导入
-- 说明这是内部实现，不是根包公共 API
+- 不要写 `Restricted fallback`；当前 `Restricted` 只支持 `requiredPermissions`、`isPage`、`children`。
+- 不要给 `useCenterModalState` 使用 `visible`；当前状态字段是 `open`。
+- 不要混用三套表单模型：`CustomForm` 使用 `CustomFormItemType`，`QueryFilter` 使用 `FormItemType`，`SchemaForm` 使用 `formConfig`。
+- 不要把 `useTranslation` 写成根包导入；多语言优先通过 `ConfigProvider` 和 `public_zhCN/public_enUS/public_viVN` 配置。
+- 不要把 `CacheTabs` 当成通用 Tabs 封装；它绑定 keep-alive 缓存场景。
