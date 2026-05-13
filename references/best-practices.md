@@ -143,3 +143,14 @@ import { MessageTip, ModalTip } from '@arim-aisdc/public-components';
 - `SchemaForm` 使用 `formConfig + ProFieldValueTypeEnum`
 
 不要混用三套配置结构。
+
+## 12. UI 任务必须加载能源管理 UI 规范
+
+涉及页面、表格、弹窗、表单、按钮、分页或样式覆盖时，先读取 `references/ui-consistency.md`。
+
+生成 UI 代码时不要临时创造新的暗色主题、间距体系、圆角、表格滚动或分页交互。默认按能源管理 UI 基线处理：
+
+- 背景、面板、按钮、状态色优先使用规范色值。
+- 数据密集页面优先使用紧凑节奏。
+- `TableMax` 的表头、滚动区域、滚动条和分页器必须按规范避免穿透、错位和中间态闪色。
+- 若现有业务代码与规范冲突，指出冲突并按用户目标选择最小偏离。

@@ -1,6 +1,6 @@
 ---
 name: public-components-skill
-description: Use when Codex 需要使用、生成、重构、排查或解释 `@arim-aisdc/public-components` 相关前端代码、imports、TypeScript errors、locale、root-package exports、`/utils`，或涉及 TableMax、CustomForm、QueryFilter、SchemaForm、ConfigProvider/useConfig、权限、Filter 系列、缓存、事件总线、MessageTip、ModalTip、页面 UI 一致性等场景。
+description: Use when Codex 需要使用、生成、重构、排查或解释 `@arim-aisdc/public-components` 相关前端代码、imports、TypeScript errors、locale、root-package exports、`/utils`，或涉及 TableMax、CustomForm、QueryFilter、SchemaForm、ConfigProvider/useConfig、权限、Filter 系列、缓存、事件总线、MessageTip、ModalTip、能源管理(ems) UI 规范、页面 UI 一致性等场景。
 ---
 
 # Public Components Skill
@@ -21,7 +21,7 @@ description: Use when Codex 需要使用、生成、重构、排查或解释 `@a
 1. 优先从 `@arim-aisdc/public-components` 根包导入。
 2. 不要编造 `src/index.ts` 或已记录二级路径没有公开的 API。
 3. 按任务类型读取相关 `references/` 文件，不要默认一次性加载全部 reference。
-4. 只要涉及页面开发或页面重构，就额外读取 `references/ui-consistency.md`。
+4. 只要涉及页面开发、页面重构、列表页、表格、表单、弹窗或任何 UI 样式，就必须读取并严格遵守 `references/ui-consistency.md`。
 5. 只有当 reference 缺少关键细节、出现 TypeScript 报错，或导出/类型冲突时，才回到源码校对。
 6. 仅在用户明确接受风险时，才建议内部路径导入。
 
@@ -72,7 +72,7 @@ import { publicThemeMap } from '@arim-aisdc/public-components/themes/variablesCo
 - `FilterSelect`、`FilterInputNumber`、`FilterSlider`、`FilterSwitch`、`FilterColor`、`FilterRadio`、`ConditionExpression`：读取 `references/filter-components.md`。
 - `CustomForm`、`QueryFilter`、`SchemaForm`、`Empty`、`CenterModal`、`DrawerCom`、`SplitPane`、`SplitterPane`、`DraggableBox`、`Icon`、`CacheTabs`、`BaseInfo`、`MessageTip`、`ModalTip`：读取 `references/other-components.md`。
 - 推荐写法与防漂移规则：读取 `references/best-practices.md`。
-- 页面开发、页面重构、列表页、详情页、表单页、弹窗页、区块式表格、UI 一致性：读取 `references/ui-consistency.md`。
+- 页面开发、页面重构、列表页、详情页、表单页、弹窗页、区块式表格、能源管理 UI、UI 一致性：必须读取 `references/ui-consistency.md`。
 - 报错、异常行为、旧文档、导出或类型不匹配：读取 `references/troubleshooting.md`。
 - reference 与源码一致性记录：读取 `references/source-consistency-checklist.md`。
 
@@ -81,7 +81,7 @@ import { publicThemeMap } from '@arim-aisdc/public-components/themes/variablesCo
 1. 先判断用户代码使用的是根包、`/utils`、主题变量路径，还是内部路径。
 2. 生成 import 前，先确认公共导出边界。
 3. 按上面的 reference 路由读取当前任务需要的文档。
-4. 如果是 UI 或页面任务，把 `references/ui-consistency.md` 作为额外约束。
+4. 如果是 UI 或页面任务，把 `references/ui-consistency.md` 作为强制验收约束；生成代码前先对齐布局、颜色、按钮、表格、分页、表单和滚动行为。
 5. 按已记录公共 API 生成代码。
 6. 如果细节缺失或 TypeScript 结果不一致，再查看源码基线文件并修正输出。
 
@@ -92,3 +92,4 @@ import { publicThemeMap } from '@arim-aisdc/public-components/themes/variablesCo
 - 不要混用三套表单模型：`CustomForm` 使用 `CustomFormItemType`，`QueryFilter` 使用 `FormItemType`，`SchemaForm` 使用 `formConfig`。
 - 不要把 `useTranslation` 写成根包导入；多语言优先通过 `ConfigProvider` 和 `public_zhCN/public_enUS/public_viVN` 配置。
 - 不要把 `CacheTabs` 当成通用 Tabs 封装；它绑定 keep-alive 缓存场景。
+- 不要在 UI 任务中自由发挥色值、圆角、间距、表格滚动或分页样式；先按 `references/ui-consistency.md` 的能源管理 UI 基线收敛。

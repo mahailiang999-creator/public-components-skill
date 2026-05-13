@@ -14,7 +14,7 @@
 - 识别 `@arim-aisdc/public-components` 根包导入和 `/utils` 导入场景。
 - 避免生成未公开导出的 API，例如 `ThemeProvider`、`useTranslation`、`ColorSelector`、`MicroComponent`。
 - 按真实公共导出支持 `TableMax`、`CustomForm`、`QueryFilter`、`SchemaForm`、`ConfigProvider/useConfig`、权限体系、Filter 系列、缓存、事件总线、`MessageTip`、`ModalTip` 和 locale。
-- 页面开发或重构时，补充遵守 `references/ui-consistency.md` 中的项目 UI 一致性基线。
+- 页面开发或重构时，严格遵守 `references/ui-consistency.md` 中的能源管理 UI 一致性规范。
 
 ## 安装
 
