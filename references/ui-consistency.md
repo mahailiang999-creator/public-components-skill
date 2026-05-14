@@ -26,6 +26,9 @@
 - 位于表格右上角。
 - 按钮组右对齐。
 - 文字按钮之间间距 `8px`。
+- `TableMax renderOperateRight` 中页面主操作按钮之间间距必须为 `8px`。
+- 页面主操作按钮组与 `TableMax` 自带刷新、列设置等小图标按钮组之间间距必须为 `12px`，中间不使用分割线。
+- 如果 `TableMax` 自带小图标外层已有 `8px` 左边距，页面主操作按钮组只补 `4px` 右边距，合计形成 `12px`，不要叠加成更大的间距。
 - 文字按钮组与图标按钮组之间间距 `12px`，中间不使用分割线。
 - 图标按钮组内部间距 `12px`。
 
@@ -197,6 +200,8 @@ Tab 与按钮同时存在时：
 - Tabs 区域底部有 `1px solid #243D65` 贯穿细线。
 - 标签整体与下方表格间距 `8px`。
 - 最左侧 Tab 文字必须与下方表格左边界完全对齐，去除首个 Tab 的左侧 padding。
+- Tab 文字必须在自己的 Tab item 内水平居中，尤其是单个 `历史记录` 这类模块标签页。
+- 只居中 `.ant-tabs-tab` / `.ant-tabs-tab-btn` 内部文字，不要把整个 `.ant-tabs-nav-list` 或 Tab 导航条整体居中，除非用户明确要求整组 Tabs 居中。
 
 ## 8. 数据表格
 
@@ -211,7 +216,7 @@ Tab 与按钮同时存在时：
 
 表格行：
 
-- 奇数行背景 `#0C1B3B`，边框 `1px solid #1E345B`，高度 `32px`。
+- 奇数行背景 `#0C1B3B`，边框 `1px solid #1E345B`，高度 `32px`。 
 - 偶数行背景 `#010C31`，边框 `1px solid #1E345B`，高度 `32px`。
 - 默认状态没有任何选中色，包括第一行。
 - 只有 hover 或明确选中时，才显示 `#2A4D7D` 透明蓝色叠加层。
@@ -229,6 +234,7 @@ Tab 与按钮同时存在时：
 - 页面自身负责刷新时使用 `refreshFun={getData}`。
 - `renderOperateLeft` 放 `QueryFilter`。
 - `renderOperateRight` 放页面主操作。
+- `renderOperateRight` 中文字按钮组推荐用 `Space size={8}` 或等效 `gap: 8px`；按钮组与 `TableMax` 内置图标按钮的视觉间距固定为 `12px`。
 - 序号列在前。
 - 操作列在后，必要时固定到右侧。
 
@@ -312,6 +318,7 @@ Label 与字段：
 - 即时筛选优先使用 `showButton={false}`。
 - 只有明确需要“查询 / 重置”时才使用 `showButton={true}`。
 - 页面需要保留筛选状态时补充 `initialValues`。
+- 放在 `TableMax renderOperateLeft` 的搜索项，字段文字与输入框之间必须保留 `8px` 空隙；例如通过作用域样式给 `#QueryFilter .custom-form-item > span` 设置 `display: inline-block; margin-right: 8px;`。
 
 `CustomForm`：
 
@@ -347,7 +354,7 @@ Label 与字段：
 - 表格表头、行高、斑马纹、hover 和滚动条是否符合规范？
 - 表格内容滚动是否不会穿透表头？
 - 分页器是否具备真实交互，且页码边框不会先闪白或灰？
-- 表单 Label 与字段之间是否为 `0px` 间距？
+- 普通表单 Label 与字段之间是否为 `0px` 间距，而 `TableMax renderOperateLeft` 中的 `QueryFilter` 搜索文字与输入框之间是否保留 `8px` 空隙？
 - 是否避免了随意裸色、随意圆角、随意阴影、营销式卡片和孤立 demo 样式？
 
 任何一项不满足时，先按本文件修正，再输出最终代码。
