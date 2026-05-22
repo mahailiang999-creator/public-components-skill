@@ -107,13 +107,15 @@ import { to, judgeHasPermission, getTextWidth } from '@arim-aisdc/public-compone
   config={{
     theme: 'dark',
     variablesJson: {
-      '--global-primary-color': '#1677ff',
+      '--global-primary-color': primaryColorFromProjectTheme,
     },
   }}
 >
   <App />
 </ConfigProvider>
 ```
+
+如果只是排查主题变量是否生效，示例值应来自项目已有主题 token 或临时调试变量；不要把固定色值沉淀进业务代码。
 
 ## 10. 排查顺序建议
 

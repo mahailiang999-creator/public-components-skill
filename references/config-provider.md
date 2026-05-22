@@ -107,7 +107,7 @@ const config = useConfig();
     tableKeyPrefixCls: 'my-app',
     locale: public_zhCN,
     variablesJson: {
-      '--global-primary-color': '#1677ff',
+      '--global-primary-color': primaryColorFromProjectTheme,
     },
     tableMax: {
       pageSizeOptions: [10, 20, 50, 100],
@@ -119,3 +119,5 @@ const config = useConfig();
   <App />
 </ConfigProvider>
 ```
+
+`variablesJson` 中的值应来自当前项目主题、设计 token 或主题包配置。不要为了套用能源管理 UI 规范而在业务示例里写死具体颜色。

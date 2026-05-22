@@ -2,21 +2,54 @@
 
 本文件是 `public-components-skill` 的强制 UI 规范。只要任务涉及页面开发、页面重构、列表页、详情页、表单页、弹窗页、区块式表格、按钮、分页、滚动条或任何样式问题，就必须读取并遵守本文件。
 
-这套基线来自能源管理/工业调度类后台页面，目标是让基于 `@arim-aisdc/public-components` 生成的 UI 保持深色、紧凑、数据密集、专业、可交互。除非用户明确要求偏离，否则不要自由创造新的主题色、圆角、间距、表格滚动或分页样式。
+这套基线来自能源管理/工业调度类后台页面，目标是让基于 `@arim-aisdc/public-components` 生成的 UI 保持紧凑、数据密集、专业、可交互。颜色必须优先复用当前项目已有主题 token 或本文列出的语义化 CSS 变量，不要在业务代码、示例代码或组件描述里写死具体色值。没有可用变量时，宁愿删除对应颜色覆盖，也不要临时创造裸色。
 
 ## 1. 执行优先级
 
 1. 先复用当前项目已经存在的页面骨架、主题 token、组件封装和样式变量。
-2. 如果现有项目没有明确先例，严格使用本文件给出的能源管理 UI 基线。
-3. 如果用户要求、现有代码和本文件冲突，必须说明冲突点，并只做最小必要偏离。
-4. 不要把示例页面做成孤立 demo；生成结果应像现有系统自然长出来的一部分。
+2. 如果现有项目没有明确先例，严格使用本文给出的能源管理 UI 布局、密度和交互基线。
+3. 颜色只引用语义化变量；允许通过 `ConfigProvider variablesJson`、项目主题文件或 `data-theme` 机制注入变量值。
+4. 如果用户要求、现有代码和本文冲突，必须说明冲突点，并只做最小必要偏离。
+5. 不要把示例页面做成孤立 demo；生成结果应像现有系统自然长出来的一部分。
 
-## 2. 页面布局与标题
+## 2. 颜色变量
+
+变量使用原则：
+
+- 优先引用语义化颜色变量，避免重复写死具体色值。
+- Light 与 Dark 两套主题应保持同名变量，仅变量值不同。
+- 变量可由当前项目主题、`ConfigProvider variablesJson`、CSS `:root[data-theme="light"]` / `:root[data-theme="dark"]` 或等效机制提供。
+- 如果项目变量名与本文不同，但语义一致，优先使用项目已有变量名。
+- 不要为了某个局部样式临时新增不可复用的颜色变量；确实缺失时先省略颜色覆盖或复用最近的语义变量。
+
+推荐语义变量：
+
+- 页面与容器：`--global-background-color`、`--global-card-background-color`、`--global-card-effect-background-color`、`--global-card-other-background-color`、`--global-hover-background-color`、`--global-row-hover-background-color`、`--row-hover-background-color`
+- 交互主色：`--global-primary-color`、`--global-primary-text-color`、`--global-blue-selected-background-color`、`--global-focus-ring-color`
+- 文本与图标：`--global-default-text-color`、`--global-desc-text-color`、`--global-nav-text-color`、`--global-white-text-color`、`--global-tip-text-color`、`--global-disabled-text-color`、`--global-primary-text-color`、`--global-icon-text-color`、`--global-danger-text-color`
+- 边框与填充：`--global-default-border-line-color`、`--global-filled-background-color`、`--global-transparent-color`
+- 业务状态：`--global-status-warning-color`、`--global-status-info-color`、`--global-status-processing-color`、`--global-status-danger-color`、`--global-status-offline-color`
+- 表格扩展：`--global-table-header-divider-color`
+- 业务卡片扩展：`--global-abnormalAlarm-card-color`
+
+常见映射：
+
+- 页面背景使用 `--global-background-color`。
+- 卡片、面板、弹窗主体使用 `--global-card-background-color`。
+- 次级面板、表头、滚动条滑块默认态使用 `--global-card-effect-background-color`。
+- 偶数行、滚动条轨道、横竖滚动条交界块使用 `--global-card-other-background-color`。
+- 主按钮背景使用 `--global-primary-color`，hover 和选中态使用 `--global-primary-text-color`。
+- 常规文本使用 `--global-default-text-color`，说明和 placeholder 使用 `--global-desc-text-color`，禁用文本使用 `--global-disabled-text-color`。
+- 常规边框使用 `--global-default-border-line-color`。
+- 表格 hover 或明确选中行使用 `--row-hover-background-color`；如果项目只有 `--global-row-hover-background-color`，使用项目已有变量。
+- 必填星号和危险数据使用 `--global-status-danger-color` 或 `--global-danger-text-color`，以项目已有语义为准。
+
+## 3. 页面布局与标题
 
 模块标题：
 
 - 位于卡片左上角。
-- 文本颜色 `#FFFFFF`。
+- 文本颜色使用 `--global-default-text-color`。
 - 字号 `16px`。
 - 字重 `500` 或 Medium。
 - 标题右侧通常跟随右对齐工具栏。
@@ -43,7 +76,7 @@ Tab 与按钮同时存在时：
 - 操作栏必须单独起一行，放在 Tab 下方。
 - Tab 与操作栏垂直间距 `8px`。
 
-## 3. 页面骨架
+## 4. 页面骨架
 
 标准列表页优先使用这种结构：
 
@@ -70,7 +103,7 @@ Tab 与按钮同时存在时：
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: #030621;
+  background: var(--global-background-color);
 }
 
 .tableWrapper {
@@ -90,40 +123,10 @@ Tab 与按钮同时存在时：
   display: flex;
   flex-direction: column;
   gap: 12px;
-  background: #0C1B3B;
+  background: var(--global-card-background-color);
   border-radius: 6px;
 }
 ```
-
-## 4. 颜色与容器
-
-页面背景：
-
-- 使用极暗深蓝 `#030621`。
-- 用于营造沉浸式暗黑工业后台氛围。
-
-卡片和面板：
-
-- 背景 `#0C1B3B`。
-- 不加边框。
-- 全局微圆角 `6px`。
-- 内边距 `12px`。
-
-基础文字：
-
-- 主文字 `#FFFFFF`。
-- 占位符 `rgba(255,255,255,0.45)`。
-- 禁用文字 `rgba(255,255,255,0.2)`。
-
-强调色：
-
-- 主按钮蓝 `#206CCF`。
-- Hover 和选中亮蓝 `#57A9FB`。
-- 深灰蓝边框 `#243D65`。
-- 表头蓝灰 `#1E345B`。
-- 表格 hover/选中叠加 `#2A4D7D`。
-
-如果项目已有同义主题 token，可用 token 承载这些语义，但不要改变视觉结果。
 
 ## 5. 按钮
 
@@ -131,32 +134,32 @@ Tab 与按钮同时存在时：
 
 - 一个页面最多两个主要按钮。
 - 自动选取表格上方操作栏文字按钮组中最左侧第一个按钮作为主要按钮。
-- 背景 `#206CCF`。
-- 文本 `#FFFFFF`，字重 Regular。
+- 背景使用 `--global-primary-color`。
+- 文本使用 `--global-white-text-color`，字重 Regular。
 - 无边框。
 - 圆角 `2px`。
 - 内边距约 `6px 16px`。
-- Hover 背景 `#57A9FB`。
-- Disabled 背景 `#0F2347`，边框 `#243D65`，文字 `rgba(255,255,255,0.2)`，无交互反馈。
-- Focus 使用 `2px` 蓝色透明轮廓环。
+- Hover 背景使用 `--global-primary-text-color`。
+- Disabled 背景使用 `--global-disabled-background-color`，边框使用 `--global-default-border-line-color`，文字使用 `--global-disabled-text-color`，无交互反馈。
+- Focus 使用 `--global-focus-ring-color`。
 - 背景色过渡 `150ms` 缓动。
 
 次要或幽灵按钮：
 
-- 背景透明。
-- 文本 `#FFFFFF`，字重 Regular。
-- 边框 `1px solid #243D65`。
+- 背景使用 `--global-transparent-color` 或不设置背景。
+- 文本使用 `--global-default-text-color`，字重 Regular。
+- 边框使用 `1px solid var(--global-default-border-line-color)`。
 - 圆角 `2px`。
 - 内边距 `6px 16px`。
-- Hover 背景不变，文字和边框变为 `#57A9FB`。
-- Disabled 文字和边框均为 `rgba(255,255,255,0.2)`，无交互反馈。
+- Hover 背景不变，文字和边框使用 `--global-primary-text-color`。
+- Disabled 文字和边框均使用 `--global-disabled-text-color`，无交互反馈。
 
 图标按钮：
 
-- 背景透明。
-- 图标颜色 `#FFFFFF`。
+- 背景使用 `--global-transparent-color` 或不设置背景。
+- 图标颜色使用 `--global-icon-text-color`。
 - 图标大小 `16px`。
-- Hover 图标颜色 `#57A9FB`。
+- Hover 图标颜色使用 `--global-primary-text-color`。
 - 主要按钮、次要按钮与图标按钮之间间距 `12px`。
 
 ## 6. 徽章与状态标签
@@ -166,38 +169,36 @@ Tab 与按钮同时存在时：
 - 状态灯直径 `8px`。
 - 状态灯 `border-radius: 50%`。
 - 状态灯与文本间距 `6px`。
-- 文本 `#FFFFFF`。
+- 文本使用 `--global-default-text-color`。
 - 字号 `14px`。
 
-状态色：
+状态色映射：
 
-- 待检修：`#E59500`
-- 新登记：`#33D1C9`
-- 周转包：`#57A9FB`
-- 待烘烤：`#D965D4`
-- 已报废：`#FF5449`
-- 停备包或已下线：`#798293`
-- 使用包：`#57A9FB`
-- 在修包：`#FF5449`
+- 待检修：使用 `--global-status-warning-color`。
+- 周转包、使用包、新登记：使用 `--global-status-info-color`，除非项目已有更精确的业务状态变量。
+- 待烘烤：使用 `--global-status-processing-color`。
+- 已报废、在修包：使用 `--global-status-danger-color`。
+- 停备包或已下线：使用 `--global-status-offline-color`。
+- 若某个业务状态没有对应变量，不要写死新颜色；先复用最近的状态语义或省略状态灯颜色覆盖。
 
 ## 7. Tabs
 
 页面级多页签：
 
 - 位于顶部导航栏下方、主内容卡片上方。
-- 未选中背景 `#030621`。
-- 已选中背景 `#0C1B3B`，与下方主卡片视觉连通。
-- 文本白色，字号 `14px`。
+- 未选中背景使用 `--global-background-color`。
+- 已选中背景使用 `--global-card-background-color`，与下方主卡片视觉连通。
+- 文本使用 `--global-default-text-color`，字号 `14px`。
 - 可包含页面标题和右侧关闭按钮。
-- Hover 关闭按钮时图标高亮。
+- Hover 关闭按钮时图标使用 `--global-primary-text-color` 或项目已有高亮变量。
 
 模块标签页：
 
-- 背景透明。
-- 未选中文本 `#FFFFFF`，字号 `16px`。
-- 已选中文本 `#57A9FB`，字号 `16px`，字重 Medium。
-- 指示器为底部 `2px` 实线，颜色 `#57A9FB`，宽度与文字同宽。
-- Tabs 区域底部有 `1px solid #243D65` 贯穿细线。
+- 背景使用 `--global-transparent-color` 或不设置背景。
+- 未选中文本使用 `--global-default-text-color`，字号 `16px`。
+- 已选中文本使用 `--global-primary-text-color`，字号 `16px`，字重 Medium。
+- 指示器为底部 `2px` 实线，颜色使用 `--global-primary-text-color`，实线宽度与文字同宽。
+- Tabs 区域底部有 `1px solid var(--global-default-border-line-color)` 贯穿细线。
 - 标签整体与下方表格间距 `8px`。
 - 最左侧 Tab 文字必须与下方表格左边界完全对齐，去除首个 Tab 的左侧 padding。
 - Tab 文字必须在自己的 Tab item 内水平居中，尤其是单个 `历史记录` 这类模块标签页。
@@ -207,21 +208,21 @@ Tab 与按钮同时存在时：
 
 表头：
 
-- 背景 `#1E345B`。
+- 背景使用 `--global-card-effect-background-color`。
 - 高度 `32px`。
-- 文本 `#FFFFFF`，字重 Medium。
+- 文本使用 `--global-default-text-color`，字重 Medium。
 - 表头文字距左侧 `8px`。
-- 必填红色星号与文字间距 `2px`。
-- 表头单元格之间使用 `1px` 垂直分割线，颜色 `#0C1B3B`。
+- 必填星号使用 `--global-status-danger-color`，与文字间距 `2px`。
+- 表头单元格之间使用 `1px` 垂直分割线，颜色使用 `--global-table-header-divider-color`。
 
 表格行：
 
-- 奇数行背景 `#0C1B3B`，边框 `1px solid #1E345B`，高度 `32px`。 
-- 偶数行背景 `#010C31`，边框 `1px solid #1E345B`，高度 `32px`。
+- 奇数行背景使用 `--global-card-background-color`，边框使用 `1px solid var(--global-card-effect-background-color)`，高度 `32px`。
+- 偶数行背景使用 `--global-card-other-background-color`，边框使用 `1px solid var(--global-card-effect-background-color)`，高度 `32px`。
 - 默认状态没有任何选中色，包括第一行。
-- 只有 hover 或明确选中时，才显示 `#2A4D7D` 透明蓝色叠加层。
-- 文本 `#FFFFFF`。
-- 警示数据使用 `#FF5449`。
+- 只有 hover 或明确选中时，才显示 `--row-hover-background-color` 或项目已有同义变量。
+- 文本使用 `--global-default-text-color`。
+- 警示数据使用 `--global-danger-text-color`；没有该变量时使用 `--global-status-danger-color`。
 - 表格内部文本通常左对齐，`padding-left: 8px`。
 
 `TableMax` 组合基线：
@@ -251,17 +252,17 @@ columnPinningConfig={{ left: [], right: ['operation'] }}
 - 表头必须有足够 `z-index` 和不透明背景。
 - 右侧竖向滚动条轨道必须从表头正下方开始，不得覆盖表头。
 - 表头右侧、竖向滚动条上方必须有与竖向滚动条同宽的表头同色占位块，无文字，使表头视觉上横向贯穿。
-- 横向和竖向滚动条交界处死角块颜色为 `#010C31`。
+- 横向和竖向滚动条交界处死角块使用 `--global-card-other-background-color`。
 
 滚动条样式：
 
 - 轨道宽度或高度 `12px`。
-- 轨道背景 `#010C31`。
+- 轨道背景使用 `--global-card-other-background-color`。
 - 滑块宽度 `6px`。
-- 滑块默认颜色 `#1E345B`。
+- 滑块默认颜色使用 `--global-card-effect-background-color`。
 - 滑块两端为胶囊形全圆角。
 - 滑块距离轨道顶部或左侧边缘 `2px`。
-- Hover 或拖动时滑块颜色 `#243D65`。
+- Hover 或拖动时滑块颜色使用 `--global-default-border-line-color`。
 
 ## 10. 分页器
 
@@ -275,36 +276,36 @@ columnPinningConfig={{ left: [], right: ['operation'] }}
 右侧区域从左到右依次排列，并整体右对齐：
 
 1. 文本“每页”。
-2. 下拉框，包含页大小数字，例如 `50`，右侧带 `16px` 下拉箭头，边框 `1px solid #243D65`。
+2. 下拉框，包含页大小数字，例如 `50`，右侧带 `16px` 下拉箭头，边框使用 `1px solid var(--global-default-border-line-color)`。
 3. 文本“条”。
-4. 上一页按钮，`32px` 正方形，边框 `1px solid #243D65`，内部左箭头。
+4. 上一页按钮，`32px` 正方形，边框使用 `1px solid var(--global-default-border-line-color)`，内部左箭头。
 5. 页码数字，例如 `1`、`2`、`3`、`...`、`10`。
-6. 下一页按钮，`32px` 正方形，边框 `1px solid #243D65`，内部右箭头。
+6. 下一页按钮，`32px` 正方形，边框使用 `1px solid var(--global-default-border-line-color)`，内部右箭头。
 
 分页状态：
 
-- 未选中页码文本 `#FFFFFF`。
-- 当前页页码文本 `#57A9FB`，边框 `1px solid #57A9FB`，尺寸 `32px`。
-- 上一页和下一页 disabled 时，边框颜色保持 `#243D65`，箭头颜色变为 `rgba(255,255,255,0.2)`。
+- 未选中页码文本使用 `--global-default-text-color`。
+- 当前页页码文本使用 `--global-primary-text-color`，边框使用 `1px solid var(--global-primary-text-color)`，尺寸 `32px`。
+- 上一页和下一页 disabled 时，边框颜色保持 `--global-default-border-line-color`，箭头颜色使用 `--global-disabled-text-color`。
 
 分页交互：
 
 - 每页条数下拉框、上一页、下一页、数字页码点击必须具备实际数据切换响应。
-- 数字页码切换时，边框颜色必须从透明直接平滑过渡为 `#57A9FB`。
-- 绝不允许边框先闪成白色或灰色再变成亮蓝色。
-- 可使用 `rgba(32,108,207,0.4)` 作为透明蓝色底层铺垫。
+- 数字页码切换时，边框颜色必须从透明直接平滑过渡为 `--global-primary-text-color`。
+- 绝不允许边框先闪成白色或灰色再变成高亮色。
+- 如果缺少透明过渡专用变量，使用 `transparent` 到 `--global-primary-text-color` 的过渡，不要新增裸色中间态。
 
 ## 11. 输入与表单
 
 输入控件：
 
-- 背景无或透明。
-- 标题 `#FFFFFF`，字号 `14px`，字重 Medium。
-- 文本 `#FFFFFF`，字号 `14px`。
-- 边框 `1px solid #243D65`。
+- 背景无、透明或使用 `--global-transparent-color`。
+- 标题使用 `--global-default-text-color`，字号 `14px`，字重 Medium。
+- 文本使用 `--global-default-text-color`，字号 `14px`。
+- 边框使用 `1px solid var(--global-default-border-line-color)`。
 - 圆角 `2px`。
-- Focus 边框颜色 `#57A9FB`。
-- Placeholder `rgba(255,255,255,0.45)`。
+- Focus 边框颜色使用 `--global-primary-text-color`。
+- Placeholder 使用 `--global-desc-text-color`。
 
 Label 与字段：
 
@@ -338,7 +339,7 @@ Label 与字段：
 - `840`：详情或附件查看。
 - `920`：更大的新建或详情流程。
 
-弹窗内表单、按钮、状态、表格仍应遵守本文件的颜色、间距和交互规则。
+弹窗内表单、按钮、状态、表格仍应遵守本文件的颜色变量、间距和交互规则。
 
 ## 13. 输出自查
 
@@ -346,9 +347,12 @@ Label 与字段：
 
 - 是否读取了本文件？
 - 是否复用了现有项目骨架或本文件标准骨架？
-- 页面背景是否为 `#030621` 或同义 token？
-- 面板背景是否为 `#0C1B3B` 或同义 token？
-- 主按钮是否使用 `#206CCF`，hover 是否为 `#57A9FB`？
+- 是否复用了项目已有主题 token 或本文列出的语义颜色变量？
+- 是否避免了在业务代码、示例代码或组件描述中写死具体色值？
+- 缺少对应颜色变量时，是否删除了该颜色覆盖或复用了已有语义变量？
+- 页面背景是否使用 `--global-background-color` 或项目同义 token？
+- 面板背景是否使用 `--global-card-background-color` 或项目同义 token？
+- 主按钮、hover、文本、边框、禁用态是否全部使用语义变量？
 - 页面是否最多只有两个主要按钮？
 - 标题、操作栏、表格、分页之间的间距是否为 `8px` 或 `12px` 节奏？
 - 表格表头、行高、斑马纹、hover 和滚动条是否符合规范？

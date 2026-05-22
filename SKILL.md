@@ -81,7 +81,7 @@ import { publicThemeMap } from '@arim-aisdc/public-components/themes/variablesCo
 1. 先判断用户代码使用的是根包、`/utils`、主题变量路径，还是内部路径。
 2. 生成 import 前，先确认公共导出边界。
 3. 按上面的 reference 路由读取当前任务需要的文档。
-4. 如果是 UI 或页面任务，把 `references/ui-consistency.md` 作为强制验收约束；生成代码前先对齐布局、颜色、按钮、表格、分页、表单和滚动行为。
+4. 如果是 UI 或页面任务，把 `references/ui-consistency.md` 作为强制验收约束；生成代码前先对齐布局、颜色变量、按钮、表格、分页、表单和滚动行为。
 5. 按已记录公共 API 生成代码。
 6. 如果细节缺失或 TypeScript 结果不一致，再查看源码基线文件并修正输出。
 
@@ -92,4 +92,4 @@ import { publicThemeMap } from '@arim-aisdc/public-components/themes/variablesCo
 - 不要混用三套表单模型：`CustomForm` 使用 `CustomFormItemType`，`QueryFilter` 使用 `FormItemType`，`SchemaForm` 使用 `formConfig`。
 - 不要把 `useTranslation` 写成根包导入；多语言优先通过 `ConfigProvider` 和 `public_zhCN/public_enUS/public_viVN` 配置。
 - 不要把 `CacheTabs` 当成通用 Tabs 封装；它绑定 keep-alive 缓存场景。
-- 不要在 UI 任务中自由发挥色值、圆角、间距、表格滚动或分页样式；先按 `references/ui-consistency.md` 的能源管理 UI 基线收敛。
+- 不要在 UI 任务中自由发挥色值、圆角、间距、表格滚动或分页样式；颜色优先使用项目主题 token 或 `references/ui-consistency.md` 的语义变量，缺少变量时宁愿删除颜色覆盖，不要写死裸色。
