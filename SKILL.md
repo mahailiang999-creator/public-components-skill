@@ -1,28 +1,28 @@
 ---
 name: public-components-skill
-description: Use when an AI coding agent 需要使用、生成、重构、排查或解释 `@arim-aisdc/public-components` 相关前端代码、imports、TypeScript errors、locale、root-package exports、`/utils`、Less 主题变量，或涉及 TableMax、CustomForm、QueryFilter、SchemaForm、ConfigProvider/useConfig、权限、Filter 系列、缓存、事件总线、MessageTip、ModalTip、后台管理 UI 一致性等场景。
+description: 当使用 AI 编程助手消费 `@arim-aisdc/public-components` 组件库时需要接口参考、导入约束或后台管理界面一致性指导。
 ---
 
 # Public Components Skill
 
-使用本 Skill 来帮助各类 AI 编程助手生成、审查或排查消费 `@arim-aisdc/public-components` 的代码。始终把组件库根入口导出视为公共 API 边界，并按任务类型只读取必要的 `references/` 文档。
+使用本 Skill 来帮助各类 AI 编程助手生成、审查或排查消费 `@arim-aisdc/public-components` 的代码。始终把组件库根入口导出视为公共接口边界，并按任务类型只读取必要的参考文档。
 
-## 源码基线
+## 触发条件
 
-- Skill 版本：`v1.2.0`
-- 组件库：`@arim-aisdc/public-components`
-- 源码基线：`C:\Work_Files\public-components`
-- 组件库版本：`2.3.92`
+当任务涉及以下内容时使用本 Skill：
 
-如果 Skill 文档与可访问源码冲突，以源码为准，并把该冲突视为后续需要修正文档的漂移信号。
+- 生成、重构、审查或排查消费 `@arim-aisdc/public-components` 的前端代码。
+- 确认根包导出、`/utils` 工具函数、主题变量路径或内部路径导入边界。
+- 使用 `TableMax`、`CustomForm`、`QueryFilter`、`SchemaForm`、`ConfigProvider/useConfig`、权限体系、筛选组件、缓存、事件总线、`MessageTip`、`ModalTip` 或多语言配置。
+- 处理 TypeScript 类型错误、导出不匹配、旧文档冲突、组件行为异常或后台管理界面一致性问题。
 
 ## 核心规则
 
 1. 优先从 `@arim-aisdc/public-components` 根包导入。
-2. 不要编造 `src/index.ts` 或已记录二级路径没有公开的 API。
-3. 按任务类型读取相关 `references/` 文件，不要默认一次性加载全部 reference。
-4. 只要涉及页面开发、页面重构、列表页、表格、表单、弹窗或任何 UI 样式，就必须读取并严格遵守 `references/ui-consistency.md`。
-5. 只有当 reference 缺少关键细节、出现 TypeScript 报错，或导出/类型冲突时，才回到源码校对。
+2. 不要编造 `src/index.ts` 或已记录二级路径没有公开的接口。
+3. 按任务类型读取相关 `references/` 文件，不要默认一次性加载全部参考文档。
+4. 只要涉及页面开发、页面重构、列表页、表格、表单、弹窗或任何界面样式，就必须读取并严格遵守 `references/ui-consistency.md`。
+5. 只有当参考文档缺少关键细节、出现 TypeScript 报错，或导出/类型冲突时，才回到源码校对。
 6. 仅在用户明确接受风险时，才建议内部路径导入。
 
 ## 根包公共导出
@@ -32,7 +32,7 @@ description: Use when an AI coding agent 需要使用、生成、重构、排查
 - 组件：`TableMax`、`CustomForm`、`QueryFilter`、`SchemaForm`、`ConfigProvider`、`PermissionProvider`、`Restricted`、`PermissionContext`、`BaseInfo`、`CenterModal`、`DrawerCom`、`SplitPane`、`SplitterPane`、`CacheTabs`、`DraggableBox`、`ConditionExpression`、`Icon`、`Empty`、`MessageTip`、`ModalTip`
 - Filter 系列：`FilterSelect`、`FilterInputNumber`、`FilterRadio`、`FilterSlider`、`FilterSwitch`、`FilterColor`
 - hooks 与事件：`useConfig`、`useEventBus`、`events`、`usePageCacheState`、`useCenterModalState`
-- locale：`public_zhCN`、`public_enUS`、`public_viVN`
+- 多语言配置：`public_zhCN`、`public_enUS`、`public_viVN`
 
 不要默认把以下能力作为根包导入：
 
@@ -63,26 +63,25 @@ import { to, getTextWidth, judgeHasPermission } from '@arim-aisdc/public-compone
 import { publicThemeMap } from '@arim-aisdc/public-components/themes/variablesConfig';
 ```
 
-## Reference 路由
+## 参考文档路由
 
 - `TableMax`、列定义、分页、排序、筛选、拖拽、虚拟行/列：读取 `references/table-max.md`。
-- `ConfigProvider`、`useConfig`、主题变量、locale、TableMax 全局配置：读取 `references/config-provider.md`。
+- `ConfigProvider`、`useConfig`、主题变量、多语言配置、TableMax 全局配置：读取 `references/config-provider.md`。
 - `PermissionProvider`、`Restricted`、`PermissionContext`、权限判断：读取 `references/permission.md`。
 - `useEventBus`、`events`、`usePageCacheState`、`useCenterModalState`、hook 行为：读取 `references/hooks.md`。
 - `FilterSelect`、`FilterInputNumber`、`FilterSlider`、`FilterSwitch`、`FilterColor`、`FilterRadio`、`ConditionExpression`：读取 `references/filter-components.md`。
 - `CustomForm`、`QueryFilter`、`SchemaForm`、`Empty`、`CenterModal`、`DrawerCom`、`SplitPane`、`SplitterPane`、`DraggableBox`、`Icon`、`CacheTabs`、`BaseInfo`、`MessageTip`、`ModalTip`：读取 `references/other-components.md`。
 - 推荐写法与防漂移规则：读取 `references/best-practices.md`。
-- 页面开发、页面重构、列表页、详情页、表单页、弹窗页、区块式表格、后台管理 UI、UI 一致性：必须读取 `references/ui-consistency.md`。
+- 页面开发、页面重构、列表页、详情页、表单页、弹窗页、区块式表格、后台管理界面、UI 一致性约束：必须读取 `references/ui-consistency.md`。
 - 报错、异常行为、旧文档、导出或类型不匹配：读取 `references/troubleshooting.md`。
-- reference 与源码一致性记录：读取 `references/source-consistency-checklist.md`。
 
 ## 任务流程
 
 1. 先判断用户代码使用的是根包、`/utils`、主题变量路径，还是内部路径。
 2. 生成 import 前，先确认公共导出边界。
-3. 按上面的 reference 路由读取当前任务需要的文档。
-4. 如果是 UI 或页面任务，把 `references/ui-consistency.md` 作为强制验收约束；生成代码前先对齐布局、颜色变量、按钮、表格、分页、表单和滚动行为。
-5. 按已记录公共 API 生成代码。
+3. 按上面的参考文档路由读取当前任务需要的文档。
+4. 如果是界面或页面任务，把 `references/ui-consistency.md` 作为强制验收约束；生成代码前先对齐布局、颜色变量、按钮、表格、分页、表单和滚动行为。
+5. 按已记录公共接口生成代码。
 6. 如果细节缺失或 TypeScript 结果不一致，再查看源码基线文件并修正输出。
 
 ## 高风险错误
@@ -93,4 +92,16 @@ import { publicThemeMap } from '@arim-aisdc/public-components/themes/variablesCo
 - 不要把 `useTranslation` 写成根包导入；多语言优先通过 `ConfigProvider` 和 `public_zhCN/public_enUS/public_viVN` 配置。
 - 不要把 `CacheTabs` 当成通用 Tabs 封装；它绑定 keep-alive 缓存场景。
 - 不要在 `.less` 或 `.module.less` 中直接写 `var(--global-*)`；优先使用项目已有 Less 主题变量，例如 `@global-card-background-color`。
-- 不要在 UI 任务中自由发挥色值、圆角、间距、表格滚动或分页样式；颜色优先使用项目主题 token 或 `references/ui-consistency.md` 的语义变量，缺少变量时宁愿删除颜色覆盖，不要写死裸色。
+- 不要在 UI界面 任务中自由发挥色值、圆角、间距、表格滚动或分页样式；颜色优先使用项目主题 token 或 `references/ui-consistency.md` 的语义变量，缺少变量时宁愿删除颜色覆盖，不要写死裸色。
+
+## 维护信息
+
+本段只服务 Skill 维护者，不是普通任务必须关注的上下文。除非正在校准本 Skill 或用户明确要求核对源码，否则不要因为这些信息读取本地源码。
+
+- Skill 版本：`v1.2.0`
+- 组件库：`@arim-aisdc/public-components`
+- 组件库版本：`2.3.92`
+- 源码基线：`C:\Work_Files\public-components`
+- 本地版本更新记录：`VERSION_UPDATES.local.md`，该文件只保留在维护者本地，并通过 `.gitignore` 排除，不随 Skill 发布。
+
+如果 Skill 文档与可访问源码冲突，以源码为准，并把该冲突视为后续需要修正文档的漂移信号。

@@ -19,7 +19,7 @@ const maintenanceGuide = {
     'Confirm package.json version.',
     'Compare src/index.ts root exports with SKILL.md and references.',
     'Check component type.ts files only for task-relevant API details.',
-    'Update references/source-consistency-checklist.md when source and docs drift.',
+    'Update local VERSION_UPDATES.local.md when source and docs drift.',
   ],
 };
 

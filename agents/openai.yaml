@@ -1,6 +1,6 @@
 interface:
   display_name: "Public Components"
-  short_description: "按真实公共导出使用 @arim-aisdc/public-components。"
+  short_description: "帮助各类 AI 编程助手正确使用 @arim-aisdc/public-components 组件库"
   default_prompt: "使用 $public-components-skill 帮我基于 @arim-aisdc/public-components 生成或排查代码。"
 
 policy:

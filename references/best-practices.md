@@ -59,10 +59,10 @@ import { ... } from '@arim-aisdc/public-components';
 
 - 表格缓存前缀
 - 用户隔离
-- locale
+- 多语言配置
 - 主题变量
 
-## 5. 多语言优先走 locale，不要默认写 useTranslation
+## 5. 多语言优先走 ConfigProvider，不要默认写 useTranslation
 
 推荐：
 
@@ -144,11 +144,11 @@ import { MessageTip, ModalTip } from '@arim-aisdc/public-components';
 
 不要混用三套配置结构。
 
-## 12. UI 任务必须加载后台管理 UI 一致性规范
+## 12. 界面任务必须加载后台管理界面一致性规范
 
 涉及页面、表格、弹窗、表单、按钮、分页或样式覆盖时，先读取 `references/ui-consistency.md`。
 
-生成 UI 代码时不要临时创造新的主题色、间距体系、圆角、表格滚动或分页交互。默认按后台管理 UI 一致性基线处理：
+生成界面代码时不要临时创造新的主题色、间距体系、圆角、表格滚动或分页交互。默认按后台管理界面一致性基线处理：
 
 - 背景、面板、按钮、状态色优先使用当前项目已有主题 token 或 `references/ui-consistency.md` 记录的语义颜色变量。
 - 写 `.less` / `.module.less` 时优先使用项目已有 Less 变量，例如 `@global-card-background-color`，不要把 `var(--global-card-background-color)` 直接写进业务样式。
