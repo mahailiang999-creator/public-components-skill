@@ -120,4 +120,4 @@ const config = useConfig();
 </ConfigProvider>
 ```
 
-`variablesJson` 中的值应来自当前项目主题、设计 token 或主题包配置。不要为了套用能源管理 UI 规范而在业务示例里写死具体颜色。
+`variablesJson` 中的值应来自当前项目主题、设计 token 或主题包配置。不要为了套用特定业务 UI 基线而在业务示例里写死具体颜色。

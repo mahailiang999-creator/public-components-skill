@@ -6,13 +6,13 @@
 
 输入文档：
 
-- 根目录临时文件 `能源管理skill.md`
+- 根目录临时的业务 UI 规范输入文件
 
 处理结果：
 
-- 已将其中的能源管理/工业调度后台 UI 规则融合到 `references/ui-consistency.md`。
+- 已将其中的数据密集型后台 UI 规则融合到 `references/ui-consistency.md`。
 - 已将 `SKILL.md` 中 UI 任务的处理要求改为必须读取并严格遵守 `references/ui-consistency.md`。
-- 已在 `references/best-practices.md` 补充 UI 任务必须加载能源管理 UI 规范的规则。
+- 已在 `references/best-practices.md` 补充 UI 任务必须加载后台管理 UI 一致性规范的规则。
 - 临时输入文档完成融合后应从 Skill 根目录删除，避免出现两个互相竞争的 UI 规范入口。
 
 ## 2026-05-12 校准记录

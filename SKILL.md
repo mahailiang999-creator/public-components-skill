@@ -1,11 +1,11 @@
 ---
 name: public-components-skill
-description: Use when Codex 需要使用、生成、重构、排查或解释 `@arim-aisdc/public-components` 相关前端代码、imports、TypeScript errors、locale、root-package exports、`/utils`，或涉及 TableMax、CustomForm、QueryFilter、SchemaForm、ConfigProvider/useConfig、权限、Filter 系列、缓存、事件总线、MessageTip、ModalTip、能源管理(ems) UI 规范、页面 UI 一致性等场景。
+description: Use when an AI coding agent 需要使用、生成、重构、排查或解释 `@arim-aisdc/public-components` 相关前端代码、imports、TypeScript errors、locale、root-package exports、`/utils`、Less 主题变量，或涉及 TableMax、CustomForm、QueryFilter、SchemaForm、ConfigProvider/useConfig、权限、Filter 系列、缓存、事件总线、MessageTip、ModalTip、后台管理 UI 一致性等场景。
 ---
 
 # Public Components Skill
 
-使用本 Skill 来生成、审查或排查消费 `@arim-aisdc/public-components` 的代码。始终把组件库根入口导出视为公共 API 边界，并按任务类型只读取必要的 `references/` 文档。
+使用本 Skill 来帮助各类 AI 编程助手生成、审查或排查消费 `@arim-aisdc/public-components` 的代码。始终把组件库根入口导出视为公共 API 边界，并按任务类型只读取必要的 `references/` 文档。
 
 ## 源码基线
 
@@ -72,7 +72,7 @@ import { publicThemeMap } from '@arim-aisdc/public-components/themes/variablesCo
 - `FilterSelect`、`FilterInputNumber`、`FilterSlider`、`FilterSwitch`、`FilterColor`、`FilterRadio`、`ConditionExpression`：读取 `references/filter-components.md`。
 - `CustomForm`、`QueryFilter`、`SchemaForm`、`Empty`、`CenterModal`、`DrawerCom`、`SplitPane`、`SplitterPane`、`DraggableBox`、`Icon`、`CacheTabs`、`BaseInfo`、`MessageTip`、`ModalTip`：读取 `references/other-components.md`。
 - 推荐写法与防漂移规则：读取 `references/best-practices.md`。
-- 页面开发、页面重构、列表页、详情页、表单页、弹窗页、区块式表格、能源管理 UI、UI 一致性：必须读取 `references/ui-consistency.md`。
+- 页面开发、页面重构、列表页、详情页、表单页、弹窗页、区块式表格、后台管理 UI、UI 一致性：必须读取 `references/ui-consistency.md`。
 - 报错、异常行为、旧文档、导出或类型不匹配：读取 `references/troubleshooting.md`。
 - reference 与源码一致性记录：读取 `references/source-consistency-checklist.md`。
 
@@ -92,4 +92,5 @@ import { publicThemeMap } from '@arim-aisdc/public-components/themes/variablesCo
 - 不要混用三套表单模型：`CustomForm` 使用 `CustomFormItemType`，`QueryFilter` 使用 `FormItemType`，`SchemaForm` 使用 `formConfig`。
 - 不要把 `useTranslation` 写成根包导入；多语言优先通过 `ConfigProvider` 和 `public_zhCN/public_enUS/public_viVN` 配置。
 - 不要把 `CacheTabs` 当成通用 Tabs 封装；它绑定 keep-alive 缓存场景。
+- 不要在 `.less` 或 `.module.less` 中直接写 `var(--global-*)`；优先使用项目已有 Less 主题变量，例如 `@global-card-background-color`。
 - 不要在 UI 任务中自由发挥色值、圆角、间距、表格滚动或分页样式；颜色优先使用项目主题 token 或 `references/ui-consistency.md` 的语义变量，缺少变量时宁愿删除颜色覆盖，不要写死裸色。

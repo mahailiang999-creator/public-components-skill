@@ -2,12 +2,12 @@
 
 本文件是 `public-components-skill` 的强制 UI 规范。只要任务涉及页面开发、页面重构、列表页、详情页、表单页、弹窗页、区块式表格、按钮、分页、滚动条或任何样式问题，就必须读取并遵守本文件。
 
-这套基线来自能源管理/工业调度类后台页面，目标是让基于 `@arim-aisdc/public-components` 生成的 UI 保持紧凑、数据密集、专业、可交互。颜色必须优先复用当前项目已有主题 token 或本文列出的语义化 CSS 变量，不要在业务代码、示例代码或组件描述里写死具体色值。没有可用变量时，宁愿删除对应颜色覆盖，也不要临时创造裸色。
+这套基线适用于数据密集型后台管理页面，目标是让基于 `@arim-aisdc/public-components` 生成的 UI 保持紧凑、专业、可交互，并能自然融入不同业务项目。颜色必须优先复用当前项目已有主题 token 或本文列出的语义化主题变量，不要在业务代码、示例代码或组件描述里写死具体色值。没有可用变量时，宁愿删除对应颜色覆盖，也不要临时创造裸色。
 
 ## 1. 执行优先级
 
 1. 先复用当前项目已经存在的页面骨架、主题 token、组件封装和样式变量。
-2. 如果现有项目没有明确先例，严格使用本文给出的能源管理 UI 布局、密度和交互基线。
+2. 如果现有项目没有明确先例，严格使用本文给出的后台管理 UI 布局、密度和交互基线。
 3. 颜色只引用语义化变量；允许通过 `ConfigProvider variablesJson`、项目主题文件或 `data-theme` 机制注入变量值。
 4. 如果用户要求、现有代码和本文冲突，必须说明冲突点，并只做最小必要偏离。
 5. 不要把示例页面做成孤立 demo；生成结果应像现有系统自然长出来的一部分。
@@ -18,9 +18,15 @@
 
 - 优先引用语义化颜色变量，避免重复写死具体色值。
 - Light 与 Dark 两套主题应保持同名变量，仅变量值不同。
-- 变量可由当前项目主题、`ConfigProvider variablesJson`、CSS `:root[data-theme="light"]` / `:root[data-theme="dark"]` 或等效机制提供。
+- 变量可由当前项目主题、`ConfigProvider variablesJson`、Less 全局变量、CSS `:root[data-theme="light"]` / `:root[data-theme="dark"]` 或等效机制提供。
 - 如果项目变量名与本文不同，但语义一致，优先使用项目已有变量名。
 - 不要为了某个局部样式临时新增不可复用的颜色变量；确实缺失时先省略颜色覆盖或复用最近的语义变量。
+
+Less 代码生成规则：
+
+- 如果当前项目使用 `.less` / `.module.less`，输出样式时必须优先使用 Less 变量，例如 `@global-card-background-color`、`@global-default-text-color`、`@global-primary-text-color`。
+- 不要在业务 `.less` 中直接写 `var(--global-card-background-color)`、`var(--global-default-text-color)` 这类 CSS 变量；这些通常只应出现在主题变量定义文件或项目已存在的特殊兼容场景中。
+- 本文件中的 `--global-*` 表示语义 token 名称；在 Less 文件里应按项目约定转换为对应的 `@global-*` 写法，例如 `--global-card-background-color` 对应 `@global-card-background-color`。
 
 推荐语义变量：
 
@@ -103,7 +109,7 @@ Tab 与按钮同时存在时：
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: var(--global-background-color);
+  background: @global-background-color;
 }
 
 .tableWrapper {
@@ -123,7 +129,7 @@ Tab 与按钮同时存在时：
   display: flex;
   flex-direction: column;
   gap: 12px;
-  background: var(--global-card-background-color);
+  background: @global-card-background-color;
   border-radius: 6px;
 }
 ```
@@ -148,7 +154,7 @@ Tab 与按钮同时存在时：
 
 - 背景使用 `--global-transparent-color` 或不设置背景。
 - 文本使用 `--global-default-text-color`，字重 Regular。
-- 边框使用 `1px solid var(--global-default-border-line-color)`。
+- 边框使用 `1px solid @global-default-border-line-color`。
 - 圆角 `2px`。
 - 内边距 `6px 16px`。
 - Hover 背景不变，文字和边框使用 `--global-primary-text-color`。
@@ -198,7 +204,7 @@ Tab 与按钮同时存在时：
 - 未选中文本使用 `--global-default-text-color`，字号 `16px`。
 - 已选中文本使用 `--global-primary-text-color`，字号 `16px`，字重 Medium。
 - 指示器为底部 `2px` 实线，颜色使用 `--global-primary-text-color`，实线宽度与文字同宽。
-- Tabs 区域底部有 `1px solid var(--global-default-border-line-color)` 贯穿细线。
+- Tabs 区域底部有 `1px solid @global-default-border-line-color` 贯穿细线。
 - 标签整体与下方表格间距 `8px`。
 - 最左侧 Tab 文字必须与下方表格左边界完全对齐，去除首个 Tab 的左侧 padding。
 - Tab 文字必须在自己的 Tab item 内水平居中，尤其是单个 `历史记录` 这类模块标签页。
@@ -217,8 +223,8 @@ Tab 与按钮同时存在时：
 
 表格行：
 
-- 奇数行背景使用 `--global-card-background-color`，边框使用 `1px solid var(--global-card-effect-background-color)`，高度 `32px`。
-- 偶数行背景使用 `--global-card-other-background-color`，边框使用 `1px solid var(--global-card-effect-background-color)`，高度 `32px`。
+- 奇数行背景使用 `--global-card-background-color`，在 Less 中写作 `@global-card-background-color`；边框使用 `1px solid @global-card-effect-background-color`，高度 `32px`。
+- 偶数行背景使用 `--global-card-other-background-color`，在 Less 中写作 `@global-card-other-background-color`；边框使用 `1px solid @global-card-effect-background-color`，高度 `32px`。
 - 默认状态没有任何选中色，包括第一行。
 - 只有 hover 或明确选中时，才显示 `--row-hover-background-color` 或项目已有同义变量。
 - 文本使用 `--global-default-text-color`。
@@ -276,16 +282,16 @@ columnPinningConfig={{ left: [], right: ['operation'] }}
 右侧区域从左到右依次排列，并整体右对齐：
 
 1. 文本“每页”。
-2. 下拉框，包含页大小数字，例如 `50`，右侧带 `16px` 下拉箭头，边框使用 `1px solid var(--global-default-border-line-color)`。
+2. 下拉框，包含页大小数字，例如 `50`，右侧带 `16px` 下拉箭头，边框在 Less 中使用 `1px solid @global-default-border-line-color`。
 3. 文本“条”。
-4. 上一页按钮，`32px` 正方形，边框使用 `1px solid var(--global-default-border-line-color)`，内部左箭头。
+4. 上一页按钮，`32px` 正方形，边框在 Less 中使用 `1px solid @global-default-border-line-color`，内部左箭头。
 5. 页码数字，例如 `1`、`2`、`3`、`...`、`10`。
-6. 下一页按钮，`32px` 正方形，边框使用 `1px solid var(--global-default-border-line-color)`，内部右箭头。
+6. 下一页按钮，`32px` 正方形，边框在 Less 中使用 `1px solid @global-default-border-line-color`，内部右箭头。
 
 分页状态：
 
 - 未选中页码文本使用 `--global-default-text-color`。
-- 当前页页码文本使用 `--global-primary-text-color`，边框使用 `1px solid var(--global-primary-text-color)`，尺寸 `32px`。
+- 当前页页码文本使用 `--global-primary-text-color`，边框在 Less 中使用 `1px solid @global-primary-text-color`，尺寸 `32px`。
 - 上一页和下一页 disabled 时，边框颜色保持 `--global-default-border-line-color`，箭头颜色使用 `--global-disabled-text-color`。
 
 分页交互：
@@ -302,7 +308,7 @@ columnPinningConfig={{ left: [], right: ['operation'] }}
 - 背景无、透明或使用 `--global-transparent-color`。
 - 标题使用 `--global-default-text-color`，字号 `14px`，字重 Medium。
 - 文本使用 `--global-default-text-color`，字号 `14px`。
-- 边框使用 `1px solid var(--global-default-border-line-color)`。
+- 边框使用 `1px solid @global-default-border-line-color`。
 - 圆角 `2px`。
 - Focus 边框颜色使用 `--global-primary-text-color`。
 - Placeholder 使用 `--global-desc-text-color`。
@@ -348,6 +354,7 @@ Label 与字段：
 - 是否读取了本文件？
 - 是否复用了现有项目骨架或本文件标准骨架？
 - 是否复用了项目已有主题 token 或本文列出的语义颜色变量？
+- 如果输出 `.less` / `.module.less`，是否使用了 `@global-*` Less 变量，而不是直接写 `var(--global-*)`？
 - 是否避免了在业务代码、示例代码或组件描述中写死具体色值？
 - 缺少对应颜色变量时，是否删除了该颜色覆盖或复用了已有语义变量？
 - 页面背景是否使用 `--global-background-color` 或项目同义 token？
