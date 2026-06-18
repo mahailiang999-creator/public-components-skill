@@ -73,6 +73,7 @@ import { publicThemeMap } from '@arim-aisdc/public-components/themes/variablesCo
 - `CustomForm`、`QueryFilter`、`SchemaForm`、`Empty`、`CenterModal`、`DrawerCom`、`SplitPane`、`SplitterPane`、`DraggableBox`、`Icon`、`CacheTabs`、`BaseInfo`、`MessageTip`、`ModalTip`：读取 `references/other-components.md`。
 - 推荐写法与防漂移规则：读取 `references/best-practices.md`。
 - 页面开发、页面重构、列表页、详情页、表单页、弹窗页、区块式表格、后台管理界面、UI 一致性约束：必须读取 `references/ui-consistency.md`。
+- UI 颜色变量找不到合适语义 token，且当前项目没有可复用写法时，最后读取 `references/color-variable-palette.md` 作为最低优先级兜底参考。
 - 报错、异常行为、旧文档、导出或类型不匹配：读取 `references/troubleshooting.md`。
 
 ## 任务流程
@@ -80,9 +81,10 @@ import { publicThemeMap } from '@arim-aisdc/public-components/themes/variablesCo
 1. 先判断用户代码使用的是根包、`/utils`、主题变量路径，还是内部路径。
 2. 生成 import 前，先确认公共导出边界。
 3. 按上面的参考文档路由读取当前任务需要的文档。
-4. 如果是界面或页面任务，把 `references/ui-consistency.md` 作为强制验收约束；生成代码前先对齐布局、颜色变量、按钮、表格、分页、表单和滚动行为。
-5. 按已记录公共接口生成代码。
-6. 如果细节缺失或 TypeScript 结果不一致，再查看源码基线文件并修正输出。
+4. 如果是界面或页面任务，把 `references/ui-consistency.md` 作为强制验收约束；生成代码前先观察当前项目类似页面和组件是否已有更简单写法，优先使用组件内置 props、组件组合和现有 class，避免不必要的 CSS/Less。
+5. 遇到颜色不确定时，先查当前项目已有 token 或类似组件写法，再按 `references/ui-consistency.md` 的语义变量处理；仍找不到合适变量时，才读取 `references/color-variable-palette.md` 作为最低优先级参考。
+6. 按已记录公共接口生成代码。
+7. 如果细节缺失或 TypeScript 结果不一致，再查看源码基线文件并修正输出。
 
 ## 高风险错误
 
