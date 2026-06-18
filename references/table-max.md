@@ -10,6 +10,7 @@
 ```ts
 import {
   TableMax,
+  ColumnType,
   FilterType,
   InputType,
   type TableMaxProps,
@@ -142,6 +143,69 @@ const columns: TableMaxColumnType[] = [
 - `exportConfig`
 - `request`
 
+## 导出配置
+
+开启导出按钮：
+
+```tsx
+<TableMax
+  tableId="user-table"
+  columns={columns}
+  datas={rows}
+  canExport
+/>;
+```
+
+当前源码支持三类导出数据来源，优先级为：
+
+1. `exportConfig.pageFetcher`
+2. `exportConfig.getExportDataList`
+3. 当前表格 `datas`
+
+`pageFetcher` 用于分页全量导出：
+
+```tsx
+<TableMax
+  tableId="user-table"
+  columns={columns}
+  datas={rows}
+  totalCount={total}
+  canExport
+  exportConfig={{
+    fileName: '用户列表',
+    pageFetcher: {
+      apiFn: params => fetchUsers({ ...query, ...params }),
+      extractItems: response => response.items,
+      extractTotalCount: response => response.totalCount,
+      extraParams: query,
+      totalCount: total,
+      pageSize: 1000,
+      maxConcurrent: 1,
+      retryCount: 2,
+    },
+  }}
+/>;
+```
+
+`pageFetcher` 字段：
+
+- `apiFn: (params: { skipCount: number; maxResultCount: number }) => Promise<any>`
+- `extractItems: (response) => any[]`
+- `extractTotalCount?: (response) => number`
+- `extraParams?: Record<string, any>`
+- `totalCount?: number`
+- `initialPageSize?: number`
+- `maxConcurrent?: number`
+- `pageSize?: number`
+- `retryCount?: number`
+
+注意：
+
+- 当前源码把单次 `pageSize` 限制到最大 `1000`。
+- 当总数大于 `5000` 且提供 `pageFetcher` 时，会走流式导出路径。
+- `ExportOptions` 类型中 `pageFetcher` 是必填字段；不要只为了配置 `fileName/sheetName` 传不完整的 `exportConfig`。依赖当前页 `datas` 导出时优先只传 `canExport`，需要文件名时可用 `tableTitle`，需要全量分页导出时再补齐 `pageFetcher`。
+- 导出会自动排除内置选择列、拖拽列、占位列、展开列和序号列；这些列的枚举来自根包公开的 `ColumnType`。
+
 ## TableMaxColumnType
 
 列常用字段：
@@ -193,6 +257,18 @@ const columns: TableMaxColumnType[] = [
 - `openMemo`
 - `disabledExport`
 - `exportValueFormat`
+
+## ColumnType
+
+`ColumnType` 当前从根包公开导出，可用于识别 TableMax 内置列：
+
+- `ColumnType.Selection`
+- `ColumnType.Darg`
+- `ColumnType.PlaceHolder`
+- `ColumnType.Expander`
+- `ColumnType.Index`
+
+普通业务列不要使用这些 id，避免被列设置、拖拽、导出逻辑当成内置列处理。
 
 ## FilterOperator
 

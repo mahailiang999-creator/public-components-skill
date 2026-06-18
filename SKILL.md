@@ -13,7 +13,7 @@ description: 当使用 AI 编程助手消费 `@arim-aisdc/public-components` 组
 
 - 生成、重构、审查或排查消费 `@arim-aisdc/public-components` 的前端代码。
 - 确认根包导出、`/utils` 工具函数、主题变量路径或内部路径导入边界。
-- 使用 `TableMax`、`CustomForm`、`QueryFilter`、`SchemaForm`、`ConfigProvider/useConfig`、权限体系、筛选组件、缓存、事件总线、`MessageTip`、`ModalTip` 或多语言配置。
+- 使用 `TableMax`、导出配置、`CustomForm`、`QueryFilter`、`SchemaForm`、`ConfigProvider/useConfig`、权限体系、筛选组件、`ConditionExpression`、缓存、事件总线、`MessageTip`、`ModalTip` 或多语言配置。
 - 处理 TypeScript 类型错误、导出不匹配、旧文档冲突、组件行为异常或后台管理界面一致性问题。
 
 ## 核心规则
@@ -65,11 +65,11 @@ import { publicThemeMap } from '@arim-aisdc/public-components/themes/variablesCo
 
 ## 参考文档路由
 
-- `TableMax`、列定义、分页、排序、筛选、拖拽、虚拟行/列：读取 `references/table-max.md`。
+- `TableMax`、列定义、分页、排序、筛选、拖拽、虚拟行/列、导出配置：读取 `references/table-max.md`。
 - `ConfigProvider`、`useConfig`、主题变量、多语言配置、TableMax 全局配置：读取 `references/config-provider.md`。
 - `PermissionProvider`、`Restricted`、`PermissionContext`、权限判断：读取 `references/permission.md`。
 - `useEventBus`、`events`、`usePageCacheState`、`useCenterModalState`、hook 行为：读取 `references/hooks.md`。
-- `FilterSelect`、`FilterInputNumber`、`FilterSlider`、`FilterSwitch`、`FilterColor`、`FilterRadio`、`ConditionExpression`：读取 `references/filter-components.md`。
+- `FilterSelect`、`FilterInputNumber`、`FilterSlider`、`FilterSwitch`、`FilterColor`、`FilterRadio`、`ConditionExpression`、条件表达式远程参数选项：读取 `references/filter-components.md`。
 - `CustomForm`、`QueryFilter`、`SchemaForm`、`Empty`、`CenterModal`、`DrawerCom`、`SplitPane`、`SplitterPane`、`DraggableBox`、`Icon`、`CacheTabs`、`BaseInfo`、`MessageTip`、`ModalTip`：读取 `references/other-components.md`。
 - 推荐写法与防漂移规则：读取 `references/best-practices.md`。
 - 页面开发、页面重构、列表页、详情页、表单页、弹窗页、区块式表格、后台管理界面、UI 一致性约束：必须读取 `references/ui-consistency.md`。
@@ -91,6 +91,8 @@ import { publicThemeMap } from '@arim-aisdc/public-components/themes/variablesCo
 - 不要混用三套表单模型：`CustomForm` 使用 `CustomFormItemType`，`QueryFilter` 使用 `FormItemType`，`SchemaForm` 使用 `formConfig`。
 - 不要把 `useTranslation` 写成根包导入；多语言优先通过 `ConfigProvider` 和 `public_zhCN/public_enUS/public_viVN` 配置。
 - 不要把 `CacheTabs` 当成通用 Tabs 封装；它绑定 keep-alive 缓存场景。
+- 不要假设 `TableMax exportConfig` 只配置 `fileName/sheetName` 能通过类型检查；当前 `ExportOptions` 类型要求 `pageFetcher`。当前页导出优先只传 `canExport`，文件名优先用 `tableTitle`，全量导出再补齐 `pageFetcher`。
+- 不要给 `ConditionExpression` 远程参数选项同时开启前端筛选；传入 `parameterOptionsRequest` 后组件内部会把 Select `filterOption` 设为 `false` 并使用远程搜索。
 - 不要在 `.less` 或 `.module.less` 中直接写 `var(--global-*)`；优先使用项目已有 Less 主题变量，例如 `@global-card-background-color`。
 - 不要在 UI界面 任务中自由发挥色值、圆角、间距、表格滚动或分页样式；颜色优先使用项目主题 token 或 `references/ui-consistency.md` 的语义变量，缺少变量时宁愿删除颜色覆盖，不要写死裸色。
 
@@ -98,9 +100,9 @@ import { publicThemeMap } from '@arim-aisdc/public-components/themes/variablesCo
 
 本段只服务 Skill 维护者，不是普通任务必须关注的上下文。除非正在校准本 Skill 或用户明确要求核对源码，否则不要因为这些信息读取本地源码。
 
-- Skill 版本：`v1.2.0`
+- Skill 版本：`v1.3.0`
 - 组件库：`@arim-aisdc/public-components`
-- 组件库版本：`2.3.92`
+- 组件库版本：`2.3.97`
 - 源码基线：`C:\Work_Files\public-components`
 - 本地版本更新记录：`VERSION_UPDATES.local.md`，该文件只保留在维护者本地，并通过 `.gitignore` 排除，不随 Skill 发布。
 

@@ -117,7 +117,55 @@ import { to, judgeHasPermission, getTextWidth } from '@arim-aisdc/public-compone
 
 如果只是排查主题变量是否生效，示例值应来自项目已有主题 token 或临时调试变量；不要把固定色值沉淀进业务代码。
 
-## 10. 排查顺序建议
+## 10. TableMax 导出配置类型报错
+
+现象：
+
+- 给 `exportConfig` 只传 `fileName`、`sheetName` 或 `getExportDataList` 时，TypeScript 提示缺少 `pageFetcher`
+
+原因：
+
+- 当前 `TableMaxProps.exportConfig` 引用的 `ExportOptions` 类型中，`pageFetcher` 是必填字段；运行时逻辑有 `pageFetcher/getExportDataList/datas` 多数据源兜底，但类型声明更严格。
+
+处理：
+
+- 只需要当前 `datas` 导出时，可以只传 `canExport`，不要传 `exportConfig`。
+- 只需要调整导出文件名时，优先设置 `tableTitle`，当前导出逻辑会把它作为默认文件名。
+- 需要全量分页导出时，补齐 `pageFetcher.apiFn`、`extractItems` 等字段。
+- 不要默认建议内部路径导入 `ExportOptions` 绕类型；优先按公开 `TableMax` prop 形状配置。
+
+## 11. ConditionExpression 远程参数选项没有前端筛选
+
+现象：
+
+- 传入 `parameterOptionsRequest` 后，`canFrontFilter` 或 `frontendFilterOptionFun` 看起来不生效
+
+原因：
+
+- 当前实现把远程参数选项视为远程搜索场景，会设置 Select `filterOption={false}`，输入搜索通过 `parameterOptionsRequest` 发请求。
+
+处理：
+
+- 把过滤逻辑放到 `parameterOptionsRequest({ keyword })` 对应的后端或远程数据源里。
+- 不需要远程搜索时，移除 `parameterOptionsRequest`，只使用静态 `parameterOptions` / `setting` 与前端筛选。
+
+## 12. CustomForm maxTagPlaceholder 类型报错
+
+现象：
+
+- `CustomForm` 的 Select 配置写了 `maxTagPlaceholder`，但 `CustomSearchFieldType[]` 类型提示字段不存在
+
+原因：
+
+- 当前运行时代码会读取 `item.maxTagPlaceholder`，但公开类型 `CustomSearchFieldType` 还没有声明该字段。
+
+处理：
+
+- 默认依赖组件内置 Tooltip 折叠标签展示。
+- 必须自定义时，在业务侧扩展字段类型，或等待组件库补齐类型声明。
+- 不要在强类型示例里直接把 `maxTagPlaceholder` 写进 `CustomSearchFieldType` 对象。
+
+## 13. 排查顺序建议
 
 出现组件库问题时，按这个顺序判断：
 

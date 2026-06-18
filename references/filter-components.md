@@ -144,10 +144,64 @@ Props：
 - `value?: conditionExpressionItemType[]`
 - `onChange?: (value) => void`
 - `showParameter?: boolean`
-- `parameterOptions?: { label: any; value: any }[]`
+- `parameterOptions?: ConditionExpressionOptionType[]`
+- `parameterOptionsRequest?: (params) => Promise<ConditionExpressionParameterOptionsRequestResult>`
+- `parameterOptionsPageSize?: number`
 - `labelInValue?: boolean`
 - `canFrontFilter?: boolean`
 - `frontendFilterOptionFun?: (input, option) => boolean`
+
+远程参数选项类型：
+
+```ts
+type ConditionExpressionOptionType = {
+  label: any;
+  value: any;
+  [key: string]: any;
+};
+
+type ConditionExpressionParameterOptionsRequestParams = {
+  page: number;
+  pageSize: number;
+  keyword?: string;
+  groupIndex?: number;
+  conditionIndex?: number;
+};
+
+type ConditionExpressionParameterOptionsRequestResult =
+  | ConditionExpressionOptionType[]
+  | {
+      options: ConditionExpressionOptionType[];
+      total?: number;
+      hasMore?: boolean;
+    };
+```
+
+远程参数选项示例：
+
+```tsx
+<ConditionExpression
+  value={conditions}
+  onChange={setConditions}
+  parameterOptions={[{ label: '静态字段', value: 'staticField' }]}
+  parameterOptionsRequest={async ({ page, pageSize, keyword }) => {
+    const response = await fetchFields({ page, pageSize, keyword });
+    return {
+      options: response.items.map(item => ({ label: item.name, value: item.code })),
+      total: response.totalCount,
+    };
+  }}
+  parameterOptionsPageSize={20}
+/>;
+```
+
+远程选项行为：
+
+- 打开参数下拉框时加载第一页。
+- 输入搜索有 500ms debounce，会把页码重置为 1。
+- 下拉滚动到底部且仍有更多数据时继续加载下一页。
+- 静态 `parameterOptions` 会和远程返回选项合并，按 `value` 去重。
+- 传入 `parameterOptionsRequest` 后，组件内部使用远程搜索，`filterOption` 会设为 `false`；不要再依赖前端筛选。
 
 默认值结构：
 

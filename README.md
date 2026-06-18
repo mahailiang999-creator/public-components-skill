@@ -4,9 +4,9 @@
 
 ## 当前校准版本
 
-- Skill 版本：`v1.2.0`
+- Skill 版本：`v1.3.0`
 - 组件库：`@arim-aisdc/public-components`
-- 组件库版本：`2.3.92`
+- 组件库版本：`2.3.97`
 - 源码基线：`C:\Work_Files\public-components`
 
 ## 主要能力

@@ -45,6 +45,27 @@ import {
 - `RemoteSelect`
 - `UploadImg`
 
+ConditionExpression 透传字段：
+
+- `showParameter?: boolean`
+- `setting?: ConditionExpressionOptionType[]`，会作为 `parameterOptions` 传入
+- `parameterOptionsRequest?: (params) => Promise<ConditionExpressionParameterOptionsRequestResult>`
+- `parameterOptionsPageSize?: number`
+- `canFrontFilter?: boolean`
+- `frontendFilterOptionFun?: (input, option) => boolean`
+- `labelInValue?: boolean`
+
+Select 类配置：
+
+- `mode?: 'multiple' | 'tags'`
+- `maxTagCount?: number | 'responsive'`
+
+注意：
+
+- 当前源码在普通 Select、并排 Select、RemoteSelect 渲染中会读取 `item.maxTagPlaceholder`，默认用 Tooltip 展示被折叠的标签。
+- 但 `CustomSearchFieldType` 目前没有声明 `maxTagPlaceholder` 字段；如果业务代码把 `data` 强类型标注为 `CustomSearchFieldType[]`，直接写这个字段可能触发 TypeScript 报错。
+- 需要自定义折叠标签提示时，优先在业务侧扩展字段类型，或等组件库补齐类型声明；不要把 `maxTagPlaceholder` 当成已公开稳定类型字段。
+
 ## QueryFilter
 
 根包导入：

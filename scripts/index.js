@@ -8,7 +8,7 @@ const defaultSourceRoot = 'C:\\Work_Files\\public-components';
 const maintenanceGuide = {
   skill: 'public-components-skill',
   packageName: '@arim-aisdc/public-components',
-  packageVersion: '2.3.92',
+  packageVersion: '2.3.97',
   sourceRoot: process.env.PUBLIC_COMPONENTS_SOURCE || defaultSourceRoot,
   sourceFiles: {
     packageJson: 'package.json',
